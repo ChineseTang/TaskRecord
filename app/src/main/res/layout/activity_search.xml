@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#87CEFA"
+    android:orientation="vertical" >
+  <!-- android:background="@drawable/rebg" -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/searchalltask"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/button" 
+             android:paddingBottom="8dp"  
+            android:paddingLeft="25dp"  
+            android:paddingRight="25dp"  
+            android:paddingTop="8dp"   
+            android:text="所有"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/searchnotfinish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/button"  
+            android:text="未完"
+             android:paddingBottom="8dp"  
+            android:paddingLeft="25dp"  
+            android:paddingRight="25dp"  
+            android:paddingTop="8dp"  
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/searchfinish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+          	android:background="@drawable/button"  
+            android:text="已完"
+             android:paddingBottom="8dp"  
+            android:paddingLeft="25dp"  
+            android:paddingRight="25dp"  
+            android:paddingTop="8dp"  
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
+        <!--
+             <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+           
+            android:layout_gravity="center_horizontal"
+           
+            android:text="所有任务"
+            android:textColor="#000000"
+            />
+        -->
+    </LinearLayout>
+
+  <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="2dp"
+        android:background="#ffffff" /> 
+
+    <ListView
+        android:id="@+id/alltask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:divider="#000000" >
+        <!-- android:background="@drawable/rounded_edittext" -->
+    </ListView>
+
+</LinearLayout>

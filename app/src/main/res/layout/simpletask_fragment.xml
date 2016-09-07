@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#87CEFA" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <!-- 主题 -->
+        <Spinner
+            android:id="@+id/stype"
+            android:spinnerMode="dropdown"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:textSize="25sp"
+            android:singleLine="true"
+            ></Spinner>
+         <Button
+            android:id="@+id/submittask"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+             android:layout_weight="3"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button"
+            android:text="@string/createtask"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_margin="2dp"
+            android:background="#000000" />
+        <EditText
+            android:id="@+id/desc"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            android:clickable="true"
+            android:enabled="true"
+            android:gravity="top|left"
+            android:hint="请输入内容"
+            android:inputType="textMultiLine"
+            android:minLines="10"
+            android:padding="6dp"
+            android:textColorHint="#8F8F8F"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+
+</ScrollView>

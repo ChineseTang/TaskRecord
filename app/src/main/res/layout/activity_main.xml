@@ -1,0 +1,155 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#87CEFA" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".MainActivity" >
+        <!--  logo view -->
+        <LinearLayout
+            android:id="@+id/logo"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/circle"
+            android:layout_marginBottom="30dp"
+            >
+            <!-- <ImageView
+                android:id="@+id/yes"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="45dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/yes"
+                /> -->
+        </LinearLayout>
+        <!--  用户名view 输入用户名 -->
+        <LinearLayout android:focusable="true"
+            android:focusableInTouchMode="true" android:layout_width="0px"
+            android:layout_height="0px" />
+        <LinearLayout
+            android:id="@+id/user"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            >
+
+            <EditText
+                android:id="@+id/userNamea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@drawable/edittext"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:textColorHint="#ffffff"
+                android:paddingLeft="20dp"
+                android:drawablePadding="18dp"
+                android:gravity="left"
+                android:background="@null"
+                android:drawableLeft="@drawable/usericon"
+                android:hint="@string/username"
+                />
+            <View android:background="#EEEEE0"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                />
+        </LinearLayout>
+        <!--  输入密码  -->
+        <LinearLayout
+            android:id="@+id/pass"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            >
+            <EditText
+                android:id="@+id/pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pwd"
+                android:inputType="textPassword"
+                android:paddingLeft="20dp"
+                android:singleLine="true"
+                android:textColorHint="#ffffff"
+                android:textColor="@drawable/edittext"
+                android:drawableLeft="@drawable/pwd"
+                android:drawablePadding="18dp"
+                android:background="@null"
+                android:textSize="20sp" />
+            <View android:background="#EEEEE0"
+                android:layout_width="match_parent"
+                android:layout_marginTop="3dp"
+                android:layout_height="0.5dp"
+                />
+        </LinearLayout>
+        <!--  记住密码  -->
+        <!-- <LinearLayout
+            android:id="@+id/rember"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="105dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="5dp"
+            >
+            <CheckBox
+                  android:id="@+id/rememberpwd"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="right"
+                  android:layout_weight="0"
+                  />
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:text="@string/rememberpwd"
+                android:layout_weight="1"
+                />
+         </LinearLayout>  -->
+        <!--  登录按钮 和 点击注册view -->
+        <LinearLayout
+            android:id="@+id/login"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <Button
+                android:id="@+id/loginbtn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="@string/loginin"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="22dp"
+                android:textSize="20sp"
+                android:background="@drawable/button"
+                android:textColor="#ffffff"
+                />
+            <TextView
+                android:id="@+id/register"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textColor="#ffffff"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/register"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

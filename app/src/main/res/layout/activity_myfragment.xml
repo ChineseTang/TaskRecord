@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#87CEFA"
+    android:fillViewport="true" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/camerabg" />
+
+        <LinearLayout
+            android:id="@+id/registerpart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical" >
+
+            <!-- 用户名 -->
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@null"
+                android:drawableLeft="@drawable/usericon"
+                android:drawablePadding="18dp"
+                android:enabled="false"
+                android:hint="@string/username"
+                android:textColor="#000000"
+                android:paddingLeft="25dp"
+                android:singleLine="true"
+                android:text="Fred"
+                android:textSize="20sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="2dp"
+                android:background="#EEEEE0" />
+            <!-- 邮箱 -->
+
+            <TextView
+                android:id="@+id/emailaddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="6dp"
+                android:textColor="#000000"
+                android:background="@null"
+                android:drawableLeft="@drawable/email"
+                android:drawablePadding="18dp"
+                android:enabled="false"
+                android:hint="@string/email"
+                android:paddingLeft="25dp"
+                android:singleLine="true"
+                android:text="tzjsmile@qq.com"
+                android:textSize="20sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="2dp"
+                android:background="#EEEEE0" />
+
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button"
+                android:text="注销"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
