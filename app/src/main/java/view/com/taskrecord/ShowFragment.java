@@ -15,6 +15,9 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -26,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -55,6 +59,7 @@ public class ShowFragment extends Fragment {
     private String touchTime;//默认为当天时间，就是日历上面当前点击的日期
     private TaskAdapter taskadapter;
     private FloatingActionButton fab;
+    private FragmentTabHost fth;
     private GestureDetector gesture; //手势识别
     private String scontent;//添加内容
     private ArrayList<Newtask> tasks = new ArrayList<Newtask>();
@@ -83,7 +88,24 @@ public class ShowFragment extends Fragment {
       fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
+                //点击跳转到TaskFragment界面中去，同时将时间参数传递过去
+                fth.setup(getActivity(), getActivity().getSupportFragmentManager(), R.id.realtabcontent);
+                AppApplication.setTouchtime(touchTime);
+                fth.setCurrentTab(1);
+              /*  FragmentManager manager = getChildFragmentManager();
+                FragmentTransaction ft;
+                ft = manager.beginTransaction();
+                TaskFragment tf = new TaskFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("touchtime", touchTime);
+                tf.setArguments(bundle);
+                ft.replace(R.id.showpage,tf);
+                ft.addToBackStack(null);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.commit();*/
+
+               /* AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
                 final EditText et = new EditText(getActivity());
 
                 et.setHint("请输入内容");
@@ -170,7 +192,7 @@ public class ShowFragment extends Fragment {
                         }
                     }
                 });
-                dialog.show();
+                dialog.show();*/
             }
         });
         monthDateView.setTextView(tv_date, tv_week);
@@ -230,6 +252,8 @@ public class ShowFragment extends Fragment {
                                 taskadapter.notifyDataSetChanged();
                             }
                         });
+
+
                 //如果任务完成，那么可以修改为未完成
                 if(task.getNfinish() == 1 ) {
                     dialog.setNegativeButton("未完成任务",
@@ -274,7 +298,10 @@ public class ShowFragment extends Fragment {
                 dialog.setNeutralButton("修改任务", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        AlertDialog.Builder newdialog = new AlertDialog.Builder(
+                        fth.setup(getActivity(), getActivity().getSupportFragmentManager(), R.id.realtabcontent);
+                        AppApplication.setUpdatetask(task);//把任务传递过去
+                        fth.setCurrentTab(1);
+                       /* AlertDialog.Builder newdialog = new AlertDialog.Builder(
                                 getActivity(),AlertDialog.THEME_HOLO_LIGHT);
                         final EditText et = new EditText(getActivity());
                         et.setText(task.getNcontent());
@@ -290,9 +317,9 @@ public class ShowFragment extends Fragment {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {
-										/*new NewtaskController().deleteTaskById(task.getNtId());
+										*//*new NewtaskController().deleteTaskById(task.getNtId());
 										tasks.remove(positionin);
-										taskadapter.notifyDataSetChanged();*/
+										taskadapter.notifyDataSetChanged();*//*
                                     }
                                 });
                         newdialog.setNegativeButton("修改任务",new DialogInterface.OnClickListener() {
@@ -313,13 +340,13 @@ public class ShowFragment extends Fragment {
                                             R.layout.task_item, tasks);
                                     tasklist.setAdapter(taskadapter);
                                     taskadapter.notifyDataSetChanged();
-                                }
+                                }*/
 								/*new NewtaskController().deleteTaskById(task.getNtId());
 								tasks.remove(positionin);
-								taskadapter.notifyDataSetChanged();*/
+								taskadapter.notifyDataSetChanged();
                             }
                         });
-                        newdialog.show();
+                        newdialog.show();*/
                     }
 
                 });
@@ -353,7 +380,7 @@ public class ShowFragment extends Fragment {
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         gesture = new GestureDetector(this.getActivity(), new MyOnGestureListener());
         fab.attachToListView(tasklist);
-
+        fth = (FragmentTabHost) getActivity().findViewById(android.R.id.tabhost);
         touchTime = monthDateView.getTodayToView();
     }
 
@@ -455,7 +482,6 @@ public class ShowFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
             Newtask anewtask = getItem(position);
             View view;
             ViewHolder viewHolder;

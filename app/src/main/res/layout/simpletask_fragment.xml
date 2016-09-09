@@ -65,6 +65,7 @@
             android:layout_marginTop="5dp"
             android:background="@null"
             android:clickable="true"
+            android:editable="true"
             android:enabled="true"
             android:gravity="top|left"
             android:hint="请输入内容"

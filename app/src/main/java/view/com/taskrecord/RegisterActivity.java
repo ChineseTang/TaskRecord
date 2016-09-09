@@ -178,7 +178,7 @@ public class RegisterActivity extends BaseActivity {
                         AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,AlertDialog.THEME_HOLO_LIGHT);
                         dialog.setTitle("注册失败");
                         dialog.setMessage("注册信息有错误");
-                        dialog.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                        dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
 

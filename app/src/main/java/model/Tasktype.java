@@ -32,4 +32,7 @@ public class Tasktype {
         this.sid = sid;
         this.tstyle = tstyle;
     }
+    public Tasktype(String tstyle) {
+        this.tstyle = tstyle;
+    }
 }

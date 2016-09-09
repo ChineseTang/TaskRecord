@@ -3,13 +3,8 @@ package controller;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.util.ArrayList;
-
 import db.TaskRecordOpenHelper;
-import model.Tasktype;
-
 /**
  * Created by tangzhijing on 2016/9/5.
  */
@@ -82,7 +77,7 @@ public class TasktypeController {
         SQLiteDatabase db = tdb.getConnection();
         String tstyle = null;
         String sql = "select tstyle from Tasktype where sid='" + sid + "'";
-        Log.w("task",sql);
+        //Log.w("task",sql);
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {

@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTabHost;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import controller.AppApplication;
 import controller.NewtaskController;
+import controller.TasktypeController;
 import model.Newtask;
 
 public class SearchFragment extends Fragment {
@@ -167,8 +169,11 @@ public class SearchFragment extends Fragment {
                 dialog.setNeutralButton("修改任务", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-
-                        AlertDialog.Builder newdialog = new AlertDialog.Builder(
+                        FragmentTabHost fth = (FragmentTabHost) getActivity().findViewById(android.R.id.tabhost);
+                        fth.setup(getActivity(), getActivity().getSupportFragmentManager(), R.id.realtabcontent);
+                        AppApplication.setUpdatetask(task);//把任务传递过去
+                        fth.setCurrentTab(1);
+                        /*AlertDialog.Builder newdialog = new AlertDialog.Builder(
                                 getActivity(),AlertDialog.THEME_HOLO_LIGHT);
                         final EditText et = new EditText(getActivity());
                         et.setText(task.getNcontent());
@@ -184,9 +189,9 @@ public class SearchFragment extends Fragment {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {
-										/*new NewtaskController().deleteTaskById(task.getNtId());
+										*//*new NewtaskController().deleteTaskById(task.getNtId());
 										tasks.remove(positionin);
-										taskadapter.notifyDataSetChanged();*/
+										taskadapter.notifyDataSetChanged();*//*
                                     }
                                 });
                         newdialog.setNegativeButton("修改任务",new DialogInterface.OnClickListener() {
@@ -208,12 +213,12 @@ public class SearchFragment extends Fragment {
                                     }
                                     lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                                 }
-								/*new NewtaskController().deleteTaskById(task.getNtId());
+								*//*new NewtaskController().deleteTaskById(task.getNtId());
 								tasks.remove(positionin);
-								taskadapter.notifyDataSetChanged();*/
+								taskadapter.notifyDataSetChanged();*//*
                             }
                         });
-                        newdialog.show();
+                        newdialog.show();*/
                     }
 
                 });
@@ -261,7 +266,6 @@ public class SearchFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
             Newtask anewtask = getItem(position);
             View view;
             ViewHolder viewHolder;
@@ -271,6 +275,7 @@ public class SearchFragment extends Fragment {
                 //match
                 viewHolder.tasknumber = (TextView) view.findViewById(R.id.tasknumber);
                 viewHolder.taskcontent = (TextView) view.findViewById(R.id.taskcontent);
+                viewHolder.tasktype = (TextView) view.findViewById(R.id.tasktype);
                 viewHolder.taskfinish = (TextView) view.findViewById(R.id.taskfinish);
                 viewHolder.tasktime = (TextView) view.findViewById(R.id.tasktime);
                 view.setTag(viewHolder);
@@ -282,6 +287,9 @@ public class SearchFragment extends Fragment {
             //viewHolder.tasknumber.setText(String.valueOf(anewtask.getNtId())+"、");
             viewHolder.tasknumber.setText(String.valueOf(position+1)+"、");
             viewHolder.taskcontent.setText(anewtask.getNcontent());
+            String type = new TasktypeController().getTstyleBySid(anewtask.getSid());
+            viewHolder.tasktype.setText(type);
+
             if(anewtask.getNfinish() == 1) {
                 viewHolder.taskfinish.setText("已完成");
                 viewHolder.taskfinish.setTextColor(Color.RED);
@@ -302,6 +310,7 @@ public class SearchFragment extends Fragment {
         class ViewHolder{
             TextView tasknumber;
             TextView taskcontent;
+            TextView tasktype;
             TextView taskfinish;
             TextView tasktime;
         }

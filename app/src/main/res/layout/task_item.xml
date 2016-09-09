@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff0000"
     android:layout_gravity="center"
     android:orientation="vertical" >
 
@@ -36,7 +35,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxEms="16"
-                 android:textColor="#ffffff"
+                 android:textColor="#000000"
                 android:singleLine="true"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -59,7 +58,7 @@
                 android:gravity="center"
                 android:text="学习"
                 android:singleLine="true"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
             <TextView
                 android:id="@+id/taskfinish"
                 android:layout_width="0dp"
@@ -72,7 +71,7 @@
                 android:gravity="center"
                 android:text="未完成"
                 android:singleLine="true"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tasktime"
@@ -85,7 +84,7 @@
                  android:textColor="#ffffff"
                 android:text="2016.09.01"
                 android:gravity="center"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
         </LinearLayout>
   
 

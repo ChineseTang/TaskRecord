@@ -6,17 +6,39 @@ package controller;
 import android.app.Application;
 import android.content.Context;
 
+import model.Newtask;
 import model.TUser;
 
 
 public class AppApplication extends Application {
     private static Context context;
     private static TUser user;
+    private static String touchtime;
+    private static Newtask updatetask;//修改的任务
+
+    public static Newtask getUpdatetask() {
+        return updatetask;
+    }
+
+    public static void setUpdatetask(Newtask updatetask) {
+        AppApplication.updatetask = updatetask;
+    }
+
+    public static String getTouchtime() {
+        return touchtime;
+    }
+
+    public static void setTouchtime(String touchtime) {
+        AppApplication.touchtime = touchtime;
+    }
+
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
         context = getApplicationContext();
+        touchtime = null;
+        updatetask = null;
     }
     public static Context getContext() {
         return context;

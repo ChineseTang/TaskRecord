@@ -30,7 +30,7 @@ public class NewtaskController {
                 + newtask.getaTime()
                 + "','"
                 + newtask.getNtasktime() + "')";
-        Log.w("task",sql);
+       // Log.w("task",sql);
         try {
             db.execSQL(sql);
             db.close();
@@ -278,9 +278,12 @@ public class NewtaskController {
     public boolean updtateTask(Newtask newtask) {
         TaskRecordOpenHelper to = new TaskRecordOpenHelper();
         SQLiteDatabase db = to.getConnection();
-        String sql = "update Newtask set ncontent='" +newtask.getNcontent()+"',nfinish=0,nTime='"
+        String sql = "update Newtask set ncontent='" +newtask.getNcontent()
+                + "', sid=" + newtask.getSid()
+                + ",nfinish="+ newtask.getNfinish() + ",nTime='"
                 + newtask.getaTime()
-                + "',ntasktime=" + newtask.getNtasktime() + " where ntId=" + newtask.getNtId();
+                + "',ntasktime=" + newtask.getNtasktime()
+                + " where ntId=" + newtask.getNtId();
 
         //Log.d("taskrecord", sql);
         db.execSQL(sql);
