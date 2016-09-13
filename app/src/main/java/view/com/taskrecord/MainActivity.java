@@ -61,6 +61,29 @@ public class MainActivity extends BaseActivity {
         //让EditText失去光标
         eusername.clearFocus();
         epwd.clearFocus();
+        //如果用户名和密码不为空，那么直接进入
+        username = eusername.getText().toString();
+        pwd = epwd.getText().toString();
+        if(!(username == null || username.equals("") || pwd == null || pwd.equals("")) && !AppApplication.isLoginout()) {
+            TUser t = new TUser();
+            t.setuName(username);
+            t.setuPwd(pwd);
+            TUser rs = new TUserController().loginUser(t);
+            //如果rs 结果不为nul，则表示登录成功
+            if (rs != null) {
+                //将用户信息保存到全局中
+                AppApplication.setUser(rs);
+                //默认保存用户信息到Preferences中
+                editor = pref.edit();
+                editor.putBoolean("rember_password", true);
+                editor.putString("uName", username);
+                editor.putString("uPwd", pwd);
+                editor.commit();
+                Intent aintent = new Intent(MainActivity.this, MainTabActivity.class);
+                startActivity(aintent);
+                finish();
+            }
+        }
         String regtxt = "没有账号 点击注册";
         SpannableString span = new SpannableString(register.getText().toString());
         span.setSpan(new ClickableSpan() {
@@ -71,7 +94,6 @@ public class MainActivity extends BaseActivity {
                 ds.setColor(Color.WHITE);
                 ds.setUnderlineText(false);
             }
-
             @Override
             public void onClick(View arg0) {
                 Intent regintent = new Intent(MainActivity.this,RegisterActivity.class);
@@ -118,31 +140,6 @@ public class MainActivity extends BaseActivity {
                         Intent aintent = new Intent(MainActivity.this,MainTabActivity.class);
                         startActivity(aintent);
                         finish();
-                        //不要引导页面了
-						/*if(rememberpass.isChecked()) {
-							editor.putBoolean("rember_password", true);
-							editor.putString("uName", username);
-							editor.putString("uPwd", pwd);
-							editor.commit();
-						}else{
-							editor.clear();
-						}*/
-                        //如果是第一次进入引导界面，否则进入首页
-						/*pref = getSharedPreferences("data", MODE_PRIVATE);
-						editor = pref.edit();*/
-                        //设置是否是第一次加载，如果是的话，进入引导界面
-						/*if(pref.getBoolean("firstlogin",true)) {
-							editor = pref.edit();
-							editor.putBoolean("firstlogin", false);
-							editor.commit();
-							Intent aintent = new Intent(MainActivity.this,GuideActivity.class);
-							startActivity(aintent);
-							finish();
-						}else {
-							Intent aintent = new Intent(MainActivity.this,MainTabActivity.class);
-							startActivity(aintent);
-							finish();
-						}*/
                     }else {
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this,AlertDialog.THEME_HOLO_LIGHT);
                         dialog.setTitle("登录失败");

@@ -17,7 +17,6 @@ public class BaseActivity extends Activity {
     }
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
         ActivityCollector.removeActivity(this);
     }

@@ -5,7 +5,7 @@
     android:id="@+id/showpage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#87CEFA"
+    android:background="#ffffff"
     android:orientation="vertical" >
 
     <!-- android:background="@drawable/rebg" -->
@@ -63,16 +63,11 @@
             android:background="@drawable/right_arrow"
             android:contentDescription="@null" />
     </LinearLayout>
-
-    <!--
-              <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_margin="4dp"
-            android:background="#000000" />
-    -->
-    <!-- android:background="@drawable/rounded_edittext" -->
-
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="2dp"
+        android:background="#dddddd" />-->
     <LinearLayout
         android:id="@+id/datashow"
         android:layout_width="match_parent"
@@ -92,7 +87,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#ffffff" />
+        android:layout_margin="2dp"
+        android:background="#dddddd" />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -101,7 +97,9 @@
             android:id="@+id/tasklist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="#000000" >
+            android:divider="#dddddd"
+            android:dividerHeight="1dp"
+            >
         </ListView>
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab"
@@ -115,12 +113,5 @@
             fab:fab_colorPressed="@color/backgroudmd"
             fab:fab_colorRipple="@color/yellow"
             />
-        <!--<android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/addtask"
-            />-->
     </FrameLayout>
 </LinearLayout>

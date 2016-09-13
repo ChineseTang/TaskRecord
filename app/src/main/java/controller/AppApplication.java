@@ -15,6 +15,15 @@ public class AppApplication extends Application {
     private static TUser user;
     private static String touchtime;
     private static Newtask updatetask;//修改的任务
+    private static boolean loginout;
+
+    public static boolean isLoginout() {
+        return loginout;
+    }
+
+    public static void setLoginout(boolean loginout) {
+        AppApplication.loginout = loginout;
+    }
 
     public static Newtask getUpdatetask() {
         return updatetask;
@@ -39,6 +48,7 @@ public class AppApplication extends Application {
         context = getApplicationContext();
         touchtime = null;
         updatetask = null;
+        loginout = false;
     }
     public static Context getContext() {
         return context;

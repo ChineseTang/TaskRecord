@@ -3,7 +3,6 @@
     android:installLocation="preferExternal"
     package="view.com.taskrecord">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_drawer"
@@ -32,6 +31,13 @@
             android:name=".MainTabActivity"
             android:label="@string/title_activity_main_tab"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+        <receiver android:name="receiver.MyReceiver">
+            <intent-filter>
+                <action android:name= "com.Reminder.MyReceiver" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
         <supports-screens
             android:smallScreens="true"
             android:normalScreens="true"

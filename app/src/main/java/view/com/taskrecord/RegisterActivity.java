@@ -68,21 +68,7 @@ public class RegisterActivity extends BaseActivity {
         email = (EditText) findViewById(R.id.emailaddr);
         epwd = (EditText) findViewById(R.id.pwd);
         erepwd = (EditText) findViewById(R.id.repwd);
-		/*rg = (RadioGroup) findViewById(R.id.gender);
-		rmale = (RadioButton) findViewById(R.id.male);
-		rfemale = (RadioButton) findViewById(R.id.female);*/
         regbtn = (Button) findViewById(R.id.registerbtn);
-        //获得性别
-		/*rg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkId) {
-				if(checkId == rmale.getId()) {
-					sgender = rmale.getText().toString();
-				}else if(checkId == rfemale.getId()) {
-					sgender = rfemale.getText().toString();
-				}
-			}
-		});*/
         //为iback按钮注册监听事件
         iback.setOnClickListener(new OnClickListener() {
 
@@ -191,9 +177,6 @@ public class RegisterActivity extends BaseActivity {
         });
 
     }
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -240,15 +223,13 @@ public class RegisterActivity extends BaseActivity {
             bottom = top + width;
             roundPx = width/2;
         }
-        // ZLog.i(TAG, "ps:"+ left +", "+ top +", "+ right +", "+ bottom);
-
+        // Log.i(TAG, "ps:"+ left +", "+ top +", "+ right +", "+ bottom);
         Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         int color = 0xff424242;
         Paint paint = new Paint();
         Rect rect = new Rect(left, top, right, bottom);
         RectF rectF = new RectF(rect);
-
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);

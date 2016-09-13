@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import controller.ActivityCollector;
+import controller.AppApplication;
 
 
 public class MyFragment extends Fragment{
@@ -51,8 +52,10 @@ public class MyFragment extends Fragment{
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 ActivityCollector.finishAll();
+                AppApplication.setLoginout(true);
                 Intent pagelogin = new Intent(getActivity(),MainActivity.class);
                 startActivity(pagelogin);
+                getActivity().finish();
                 //System.exit(0);
             }
         });

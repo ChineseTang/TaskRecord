@@ -10,17 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentTransaction;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,11 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -41,13 +31,11 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import controller.AppApplication;
 import controller.NewtaskController;
-import controller.TasktypeController;
 import model.Newtask;
-import model.TUser;
 import myview.MonthDateView;
 import myview.MonthDateView.DateClick;
-import myview.WeekDayView;
 import com.melnykov.fab.FloatingActionButton;
+import myadapter.TaskAdapter;
 public class ShowFragment extends Fragment {
     private ImageView iv_left;
     private ImageView iv_right;
@@ -92,107 +80,6 @@ public class ShowFragment extends Fragment {
                 fth.setup(getActivity(), getActivity().getSupportFragmentManager(), R.id.realtabcontent);
                 AppApplication.setTouchtime(touchTime);
                 fth.setCurrentTab(1);
-              /*  FragmentManager manager = getChildFragmentManager();
-                FragmentTransaction ft;
-                ft = manager.beginTransaction();
-                TaskFragment tf = new TaskFragment();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("touchtime", touchTime);
-                tf.setArguments(bundle);
-                ft.replace(R.id.showpage,tf);
-                ft.addToBackStack(null);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                ft.commit();*/
-
-               /* AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-                final EditText et = new EditText(getActivity());
-
-                et.setHint("请输入内容");
-                et.setMinHeight(500);
-                et.setBackground(null);
-                et.setGravity(Gravity.TOP | Gravity.LEFT);
-                dialog.setView(et);
-                dialog.setTitle("添加任务时间为: " + touchTime);
-                dialog.setNegativeButton("类型",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                    }
-                });
-                dialog.setPositiveButton("创建任务",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        scontent = et.getText().toString();
-                        if ("".equals(scontent) || scontent == null) {
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(
-                                    getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-                            dialog.setTitle("创建任务失败");
-                            dialog.setMessage("任务内容不能为空");
-                            dialog.setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface arg0,
-                                                            int arg1) {
-
-                                        }
-                                    });
-                            dialog.show();
-                        }else {
-                            // 将前端用户填入的数据插入 到 数据库中
-                            // 将注册信息封装到Newtask对象中
-                            Newtask newtask = new Newtask();
-                            TUser user = AppApplication.getUser();
-                            newtask.setuId(user.getuId());
-                            newtask.setNcontent(scontent);
-                            newtask.setNfinish(0);// 0表示没有完成任务
-                            newtask.setaTime(touchTime);//设置任务时间
-                            newtask.setNtasktime(new Date().getTime());//设置任务创建时间
-
-                            boolean rs = new NewtaskController().addTask(newtask);
-
-                            if (rs) {
-                                // 如果插入成功，跳转到登录界面
-                                drawMonthColors(touchTime);
-                                tasks = new NewtaskController().searchByTime(AppApplication
-                                        .getUser().getuId(), touchTime);
-                                taskadapter = new TaskAdapter(AppApplication
-                                        .getContext(), R.layout.task_item, tasks);
-                                tasklist.setAdapter(taskadapter);
-                                AlertDialog.Builder dialog = new AlertDialog.Builder(
-                                        getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-                                dialog.setTitle("成功");
-                                dialog.setMessage("创建任务成功");
-                                dialog.setPositiveButton("OK",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface arg0,
-                                                                int arg1) {
-
-                                            }
-                                        });
-                                dialog.show();
-
-
-                            } else {
-                                AlertDialog.Builder dialog = new AlertDialog.Builder(
-                                        getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-                                dialog.setTitle("失败");
-                                dialog.setMessage("创建任务失败");
-                                dialog.setPositiveButton("OK",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface arg0,
-                                                                int arg1) {
-
-                                            }
-                                        });
-                                dialog.show();
-                            }
-                        }
-                    }
-                });
-                dialog.show();*/
             }
         });
         monthDateView.setTextView(tv_date, tv_week);
@@ -241,8 +128,16 @@ public class ShowFragment extends Fragment {
                 final int positionin = position;
                 AlertDialog.Builder dialog = new AlertDialog.Builder(
                         getActivity(),AlertDialog.THEME_HOLO_LIGHT);
+                EditText et = new EditText(getActivity());
+                et.setText(task.getNcontent());
+                et.setEnabled(false);
+                et.setBackground(null);
+                et.setGravity(Gravity.TOP | Gravity.LEFT);
+                et.setMinHeight(450);
+                et.setTextColor(Color.rgb(51, 51, 51));
+                dialog.setView(et);
                 dialog.setTitle("任务内容");
-                dialog.setMessage(task.getNcontent());
+                //dialog.setMessage(task.getNcontent());
                 dialog.setPositiveButton("删除任务",
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -301,52 +196,6 @@ public class ShowFragment extends Fragment {
                         fth.setup(getActivity(), getActivity().getSupportFragmentManager(), R.id.realtabcontent);
                         AppApplication.setUpdatetask(task);//把任务传递过去
                         fth.setCurrentTab(1);
-                       /* AlertDialog.Builder newdialog = new AlertDialog.Builder(
-                                getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-                        final EditText et = new EditText(getActivity());
-                        et.setText(task.getNcontent());
-                        et.setSelection(et.getText().length());
-                        et.setMinHeight(300);
-                        et.setBackground(null);
-                        et.setGravity(Gravity.TOP | Gravity.LEFT);
-                        newdialog.setView(et);
-
-                        newdialog.setTitle("任务内容");
-                        //newdialog.setMessage(task.getNcontent());
-                        newdialog.setPositiveButton("取消修改任务",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface arg0, int arg1) {
-										*//*new NewtaskController().deleteTaskById(task.getNtId());
-										tasks.remove(positionin);
-										taskadapter.notifyDataSetChanged();*//*
-                                    }
-                                });
-                        newdialog.setNegativeButton("修改任务",new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                //1、新建一个Task
-                                Newtask newtask = new Newtask(task.getNtId(),task.getuId(),task.getSid(),et.getText().toString(),
-                                        0,task.getaTime(),task.getNtasktime());
-                                //修改任务
-                                boolean rs = new NewtaskController().updtateTask(newtask);
-                                if(rs) {
-                                    String datetime = task.getaTime();
-                                    tasks = new NewtaskController().searchByTime(
-                                            AppApplication.getUser().getuId(),
-                                            datetime);
-                                    taskadapter = new TaskAdapter(
-                                            AppApplication.getContext(),
-                                            R.layout.task_item, tasks);
-                                    tasklist.setAdapter(taskadapter);
-                                    taskadapter.notifyDataSetChanged();
-                                }*/
-								/*new NewtaskController().deleteTaskById(task.getNtId());
-								tasks.remove(positionin);
-								taskadapter.notifyDataSetChanged();
-                            }
-                        });
-                        newdialog.show();*/
                     }
 
                 });
@@ -412,10 +261,6 @@ public class ShowFragment extends Fragment {
                 String gettime = monthDateView.onLeftGetTime();
                 touchTime = new String(gettime);
                 drawMonthColors(gettime);
-				/*
-				 * Toast.makeText(AppApplication.getContext(), "点击了：" + gettime,
-				 * Toast.LENGTH_SHORT).show();
-				 */
                 tasks = new NewtaskController().searchByTime(AppApplication
                         .getUser().getuId(), gettime);
                 taskadapter = new TaskAdapter(AppApplication
@@ -472,68 +317,7 @@ public class ShowFragment extends Fragment {
             monthDateView.setDaysHasThingList(list);
         }
     }
-    class TaskAdapter extends ArrayAdapter<Newtask> {
-        private int resourceId;
 
-        public TaskAdapter(Context context, int resource, List<Newtask> objects) {
-            super(context, resource, objects);
-            resourceId = resource;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Newtask anewtask = getItem(position);
-            View view;
-            ViewHolder viewHolder;
-            if (convertView == null) {
-                view = LayoutInflater.from(getContext()).inflate(resourceId,
-                        null);
-                viewHolder = new ViewHolder();
-                // match
-                viewHolder.tasknumber = (TextView) view
-                        .findViewById(R.id.tasknumber);
-                viewHolder.taskcontent = (TextView) view
-                        .findViewById(R.id.taskcontent);
-                viewHolder.tasktype = (TextView) view.findViewById(R.id.tasktype);
-                viewHolder.taskfinish = (TextView) view
-                        .findViewById(R.id.taskfinish);
-                viewHolder.tasktime = (TextView) view
-                        .findViewById(R.id.tasktime);
-                view.setTag(viewHolder);
-            } else {
-                view = convertView;
-                viewHolder = (ViewHolder) view.getTag();
-            }
-
-            // viewHolder.tasknumber.setText(String.valueOf(anewtask.getNtId())+"、");
-            viewHolder.tasknumber.setText(String.valueOf(position + 1) + "、");
-            viewHolder.taskcontent.setText(anewtask.getNcontent());
-            String type = new TasktypeController().getTstyleBySid(anewtask.getSid());
-            viewHolder.tasktype.setText(type);
-            if (anewtask.getNfinish() == 1) {
-                viewHolder.taskfinish.setText("已完成");
-                viewHolder.taskfinish.setTextColor(Color.RED);
-            } else {
-                viewHolder.taskfinish.setText("未完成");
-                viewHolder.taskfinish.setTextColor(Color.WHITE);
-            }
-            viewHolder.tasktime.setText(anewtask.getaTime());
-            if(position%2 == 0 ) {
-                view.setBackgroundResource(R.drawable.listitembgcolor1);
-            }else if(position%2 == 1 ) {
-                view.setBackgroundResource(R.drawable.listitembgcolor2);
-            }
-            return view;
-        }
-
-        class ViewHolder {
-            TextView tasknumber;
-            TextView taskcontent;
-            TextView tasktype;
-            TextView taskfinish;
-            TextView tasktime;
-        }
-    }
     //设置手势识别监听器
     private class MyOnGestureListener extends GestureDetector.SimpleOnGestureListener
     {

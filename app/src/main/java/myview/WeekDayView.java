@@ -17,7 +17,7 @@ public class WeekDayView extends View {
 	//周一到周五的颜色
 	private int mWeedayColor = Color.parseColor("#00aaff");
 	//周六、周日的颜色
-	private int mWeekendColor = Color.parseColor("#ffffff");
+	private int mWeekendColor = Color.parseColor("#333333");
 	//线的宽度
 	private int mStrokeWidth = 5;
 	private int mWeekSize = 18;
