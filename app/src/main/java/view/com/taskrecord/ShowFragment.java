@@ -60,19 +60,12 @@ public class ShowFragment extends Fragment {
 
         // 初始化控件
         init(view);
-        view.setOnTouchListener(new View.OnTouchListener() {
+      /*  view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return gesture.onTouchEvent(event);//返回手势识别触发的事件
             }
-        });
-        tasklist.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gesture.onTouchEvent(event);//返回手势识别触发的事件
-            }
-        });
-
+        });*/
       fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -10,10 +10,20 @@ public class Newtask {
     private String ncontent;//具体描述
     private int nfinish;//任务是否完成，0未完成，1完成
     private String aTime;//查询功能按时间排序,设置任务时间
+    private String notetime;//通知时间，默认为不提醒，表示不通知
     private long ntasktime;//提交任务时间
     public Newtask() {
 
     }
+
+    public String getNotetime() {
+        return notetime;
+    }
+
+    public void setNotetime(String notetime) {
+        this.notetime = notetime;
+    }
+
     public int getSid() {
         return sid;
     }
@@ -57,7 +67,7 @@ public class Newtask {
         this.ntasktime = ntasktime;
     }
     public Newtask(int ntId, int uId, int sid,String ncontent, int nfinish,
-                   String aTime, long ntasktime) {
+                   String aTime, String notetime,long ntasktime) {
         super();
         this.ntId = ntId;
         this.uId = uId;
@@ -65,6 +75,7 @@ public class Newtask {
         this.ncontent = ncontent;
         this.nfinish = nfinish;
         this.aTime = aTime;
+        this.notetime = notetime;
         this.ntasktime = ntasktime;
     }
 

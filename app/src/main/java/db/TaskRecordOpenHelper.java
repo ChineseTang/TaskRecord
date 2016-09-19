@@ -32,7 +32,7 @@ public class TaskRecordOpenHelper extends SQLiteOpenHelper {
             + "ntId INTEGER PRIMARY KEY autoincrement,"
             + "sid integer not null,"
             + "uId integer not null," + "ncontent	text," + "nfinish int,"
-            + "nTime varchar(64)," + "ntasktime long)";
+            + "nTime varchar(64)," + "notetime varchar(64),"+ "ntasktime long)";
     private final String tasktype = "create table Tasktype(" +
             "sid INTEGER PRIMARY KEY autoincrement," +
             "tstyle varchar(64) not null)";
@@ -42,6 +42,7 @@ public class TaskRecordOpenHelper extends SQLiteOpenHelper {
     private final String tasktypedata2 = "insert into Tasktype(tstyle) values('工作')";
     private final String tasktypedata3 = "insert into Tasktype(tstyle) values('家庭')";
     private final String tasktypedata4 = "insert into Tasktype(tstyle) values('杂事')";
+    private final String tasktypedata5 = "insert into Tasktype(tstyle) values('记账')";
     //private final String tasktypedata5 = "insert into tasktype(tstyle) values('自定义')";
     public static void setContext(Context context) {
         TaskRecordOpenHelper.context = context;
@@ -68,7 +69,7 @@ public class TaskRecordOpenHelper extends SQLiteOpenHelper {
         tasktypedatas.add(tasktypedata2);
         tasktypedatas.add(tasktypedata3);
         tasktypedatas.add(tasktypedata4);
-        //tasktypedatas.add(tasktypedata5);
+        tasktypedatas.add(tasktypedata5);
         inertOrUpdateDateBatch(tasktypedatas,db);
     }
 

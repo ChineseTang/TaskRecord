@@ -32,15 +32,12 @@ public class TaskAdapter extends ArrayAdapter<Newtask> {
                     null);
             viewHolder = new ViewHolder();
             // match
-            viewHolder.tasknumber = (TextView) view
-                    .findViewById(R.id.tasknumber);
-            viewHolder.taskcontent = (TextView) view
-                    .findViewById(R.id.taskcontent);
+            viewHolder.tasknumber = (TextView) view.findViewById(R.id.tasknumber);
+            viewHolder.taskcontent = (TextView) view.findViewById(R.id.taskcontent);
             viewHolder.tasktype = (TextView) view.findViewById(R.id.tasktype);
-            viewHolder.taskfinish = (TextView) view
-                    .findViewById(R.id.taskfinish);
-            viewHolder.tasktime = (TextView) view
-                    .findViewById(R.id.tasktime);
+            viewHolder.taskfinish = (TextView) view.findViewById(R.id.taskfinish);
+            viewHolder.tasknotetime = (TextView)view.findViewById(R.id.notetime);
+            viewHolder.tasktime = (TextView) view.findViewById(R.id.tasktime);
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -81,6 +78,7 @@ public class TaskAdapter extends ArrayAdapter<Newtask> {
             viewHolder.taskfinish.setText("未完成");
             viewHolder.taskfinish.setTextColor(Color.rgb(144, 144, 144));
         }
+        viewHolder.tasknotetime.setText(anewtask.getNotetime());
         viewHolder.tasktime.setText(anewtask.getaTime());
        /* if(position%2 == 0 ) {
             view.setBackgroundResource(R.drawable.listitembgcolor1);
@@ -95,6 +93,7 @@ public class TaskAdapter extends ArrayAdapter<Newtask> {
         TextView taskcontent;
         TextView tasktype;
         TextView taskfinish;
+        TextView tasknotetime;
         TextView tasktime;
     }
 }

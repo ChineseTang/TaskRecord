@@ -52,6 +52,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
     private String scontent;
     private Spinner stypes;
     private String tasktype;
+    public static int currentIntent=0;
     private int sid;
     private int oldposition = 2;
     private FloatingActionButton addnewtask;
@@ -235,6 +236,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
         addnewtask = (FloatingActionButton) view.findViewById(R.id.addnewtask);
         content.setSaveEnabled(false);
         stypes.setSaveEnabled(false);
+        submitbutton.setSaveEnabled(false);
         types = new TasktypeController().selectAllTypes();
         // 建立Adapter并且绑定数据源
         tasktypeAdapter = new ArrayAdapter(AppApplication.getContext(),R.layout.tasktype_item,types);
@@ -252,7 +254,11 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
         final Newtask nt = AppApplication.getUpdatetask();
         //submitbutton.setText("修改任务");
         String text = nt.getNcontent();
-
+        String ntime = nt.getNotetime();
+        if(!(ntime.equals("不提醒") || ntime.equals("提醒"))) {
+                     data_list.add(ntime);
+                     submitbutton.setSelection(data_list.indexOf(ntime), true);
+        }
         content.setText(text);
         AppApplication.setUpdatetask(null);
         //content.setSelection(content.getText().length());
@@ -268,6 +274,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                 // TODO Auto-generated method stub
                 // 判断输入的任务是否为空，如果为空，那么弹出错误提示
                 scontent = content.getText().toString();
+                String time = null;
                 if ("".equals(scontent) || scontent == null) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(
                             getActivity(), AlertDialog.THEME_HOLO_LIGHT);
@@ -285,8 +292,17 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                 } else {
                     // 将前端用户填入的数据插入 到 数据库中
                     // 将注册信息封装到Newtask对象中
+                    time = submitbutton.getSelectedItem().toString();
+                    //如果不是不提醒或者提醒，那么添加该条信息到广播通知中
+                    if(!(time.equals("不提醒") || time.equals("提醒"))){
+                        //如果时间没有改变，那边不需要设置
+                        String orgin = nt.getNotetime();
+                        if(!(time.equals(orgin))) {
+                            setReminder(true, nt.getaTime(), time, scontent);
+                        }
+                    }
                     Newtask newtask = new Newtask(nt.getNtId(),nt.getuId(),sid,content.getText().toString(),
-                            nt.getNfinish(),nt.getaTime(),nt.getNtasktime());
+                            nt.getNfinish(),nt.getaTime(),time,nt.getNtasktime());
                     boolean rs = new NewtaskController().updtateTask(newtask);
                     if (rs) {
                         // 如果插入成功，跳转到登录界面
@@ -379,18 +395,10 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                         newtask.setSid(sid);
                         newtask.setNcontent(scontent);
                         newtask.setNfinish(0);// 0表示没有完成任务
-                        if (AppApplication.getTouchtime() != null) {
-                            newtask.setaTime(AppApplication.getTouchtime());
-                            AppApplication.setTouchtime(null);
-                        } else {
-                            newtask.setaTime(format.format(new Date()));
-                        }
-                        newtask.setNtasktime(new Date().getTime());
-                        boolean rs = new NewtaskController().addTask(newtask);
-
+                        String reminderdate = null;
                         //同时添加通知功能，获取提醒spinner中的内容
                         String time = submitbutton.getSelectedItem().toString();
-                        String reminderdate = null;
+
                         //如果不是不提醒或者提醒，那么添加该条信息到广播通知中
                         if(!(time.equals("不提醒") || time.equals("提醒"))){
                             if (AppApplication.getTouchtime() != null) {
@@ -400,9 +408,19 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                             }
                             setReminder(true,reminderdate,time,scontent);
                         }
+                        if (AppApplication.getTouchtime() != null) {
+                            newtask.setaTime(AppApplication.getTouchtime());
+                            AppApplication.setTouchtime(null);
+                        } else {
+                            newtask.setaTime(format.format(new Date()));
+                        }
+                        //设置提醒时间
+                        newtask.setNotetime(time);
+                        newtask.setNtasktime(new Date().getTime());
 
 
 
+                        boolean rs = new NewtaskController().addTask(newtask);
                         if (rs) {
                             // 如果插入成功，跳转到登录界面
                             AlertDialog.Builder dialog = new AlertDialog.Builder(
@@ -448,7 +466,6 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
         //submitbutton.setText(time);
         data_list.add(time);
         submitbutton.setSelection(data_list.indexOf(time), true);
-        //Toast.makeText(getActivity(), "new time:" + hourOfDay + "-" + minute, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -459,38 +476,31 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
      * @param content 任务内容
      */
     private void setReminder(boolean b,String rd,String sf,String content) {
+        //设置时间格式
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd-HH:mm");
         String alarmtime = rd + "-" + sf;
         Date date = null;
         try {
            date = sdf.parse(alarmtime);
-          /*  Log.w("task",alarmtime);
-            Log.w("task",String.valueOf(date.getTime()));
-            Log.w("task",String.valueOf(new Date().getTime()));
-            Log.w("task",content);*/
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        // get the AlarmManager instance
+        //获得AlarmManager实例
         AlarmManager am= (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
-
+        //设置需要发送的intent
         Intent intent = new Intent(getActivity(),MyReceiver.class);
-        intent.setAction("VIDEO_TIMER");
-        intent.putExtra("content",content);
+        intent.putExtra("ct",content);
         // create a PendingIntent that will perform a broadcast
+        //创建一个将会运行广播的intent
         // PendingIntent这个类用于处理即将发生的事情
-        PendingIntent pi= PendingIntent.getBroadcast(getActivity(),1, intent, 0);
-
+        PendingIntent pi= PendingIntent.getBroadcast(getActivity(),currentIntent++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if(b){
-            // just use current time as the Alarm time.
-            //Calendar c=Calendar.getInstance();
-            // schedule an alarm
+            //设置闹钟的时间，当时间到达后，会触发MyReceiver广播
             am.set(AlarmManager.RTC_WAKEUP, date.getTime(), pi);
         }
         else{
             // cancel current alarm
             am.cancel(pi);
         }
-
     }
 }
