@@ -12,10 +12,10 @@ public class TasktypeController {
     /**
      * 添加一条新的类型数据
      */
-    public boolean addType(String newType) {
+    public boolean addType(String newType,int uid) {
         TaskRecordOpenHelper to = new TaskRecordOpenHelper();
         SQLiteDatabase db = to.getConnection();
-        String sql = "insert into Tasktype(tstyle) values('"+newType + "')";
+        String sql = "insert into Tasktype(tstyle,uid) values('"+newType + "','" + uid + "')";
         try {
             db.execSQL(sql);
             db.close();
@@ -25,11 +25,11 @@ public class TasktypeController {
         }
         return false;
     }
-    public ArrayList<String> selectAllTypes() {
+    public ArrayList<String> selectAllTypes(int uid) {
         TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<String> types = new ArrayList<String>();
-        String sql = "select * from Tasktype order by sid desc";
+        String sql = "select * from Tasktype where uid='0' or uid='" + uid + "' order by sid desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {

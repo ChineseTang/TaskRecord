@@ -223,6 +223,54 @@ public class NewtaskController {
         //返回任务
         return tasks;
     }
+    /**
+     *
+     * @param uid  查询提醒的任务的数目
+     * @return
+     */
+    public int searchAlertTasksNumber(int uid) {
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        int alertCount = 0;
+        //查询语句
+        String sql = "select count(*) from Newtask where notetime!='不提醒' and uid=" + uid;
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                alertCount = cs.getInt(0);
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return alertCount;
+    }
+    /**
+     *
+     * @param uid  查询不提醒的任务的数目
+     * @return
+     */
+    public int searchNotAlertTasksNumber(int uid) {
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        int alertCount = 0;
+        //查询语句
+        String sql = "select count(*) from Newtask where notetime='不提醒' and uid=" + uid;
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                alertCount = cs.getInt(0);
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return alertCount;
+    }
     //查询所有的任务
     public ArrayList<Newtask> searchAllTasks(int uid) {
 
@@ -318,7 +366,7 @@ public class NewtaskController {
     }
 
     /**
-     * 查询未完成任务
+     * 查询未完成任务 包括过期的
      * @param uid
      * @return
      */
@@ -485,5 +533,117 @@ public class NewtaskController {
       /*  Log.w("task:finishCount",String.valueOf(finishCount));
         Log.w("task:OverdueCount",String.valueOf(overdueCount));*/
         return  finishOverdue;
+    }
+    /**
+     * 查询未完成任务 不包括过期的
+     * @param uid
+     * @return
+     */
+    public ArrayList<Newtask> searchNotCompleteTasks(int uid) {
+
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        String currentdate = format.format(new Date());
+        ArrayList<Newtask> tasks = new ArrayList<Newtask>();
+        int result = 0;
+        //查询语句
+        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by ntasktime desc";
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                do {
+                    //获得的时间与现在作对比
+                    String anTime = cs.getString(cs.getColumnIndex("nTime"));
+                    result = anTime.compareTo(currentdate);
+                    if(result >= 0) {
+                        int ntid = cs.getInt(cs.getColumnIndex("ntId"));
+                        int utid = cs.getInt(cs.getColumnIndex("uId"));
+                        int sid = cs.getInt(cs.getColumnIndex("sid"));
+                        String ncontent = cs.getString(cs.getColumnIndex("ncontent"));
+                        int nfinish = cs.getInt(cs.getColumnIndex("nfinish"));
+                        String nTime = cs.getString(cs.getColumnIndex("nTime"));
+                        String notetime = cs.getString(cs.getColumnIndex("notetime"));
+                        long ntasktime = cs.getLong(cs.getColumnIndex("ntasktime"));
+                        //创建一个任务
+                        Newtask task = new Newtask();
+                        task.setNtId(ntid);
+                        task.setuId(utid);
+                        task.setSid(sid);
+                        task.setNcontent(ncontent);
+                        task.setNfinish(nfinish);
+                        task.setaTime(nTime);
+                        task.setNotetime(notetime);
+                        task.setNtasktime(ntasktime);
+                        //添加到任务表中
+                        tasks.add(task);
+                    }
+
+                } while (cs.moveToNext());
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return tasks;
+
+    }
+    /**
+     * 查询未完成任务 不包括过期的
+     * @param uid
+     * @return
+     */
+    public ArrayList<Newtask> searchOverdueTasks(int uid) {
+
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        String currentdate = format.format(new Date());
+        ArrayList<Newtask> tasks = new ArrayList<Newtask>();
+        int result = 0;
+        //查询语句
+        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by ntasktime desc";
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                do {
+                    //获得的时间与现在作对比
+                    String anTime = cs.getString(cs.getColumnIndex("nTime"));
+                    result = anTime.compareTo(currentdate);
+                    if(result < 0) {
+                        int ntid = cs.getInt(cs.getColumnIndex("ntId"));
+                        int utid = cs.getInt(cs.getColumnIndex("uId"));
+                        int sid = cs.getInt(cs.getColumnIndex("sid"));
+                        String ncontent = cs.getString(cs.getColumnIndex("ncontent"));
+                        int nfinish = cs.getInt(cs.getColumnIndex("nfinish"));
+                        String nTime = cs.getString(cs.getColumnIndex("nTime"));
+                        String notetime = cs.getString(cs.getColumnIndex("notetime"));
+                        long ntasktime = cs.getLong(cs.getColumnIndex("ntasktime"));
+                        //创建一个任务
+                        Newtask task = new Newtask();
+                        task.setNtId(ntid);
+                        task.setuId(utid);
+                        task.setSid(sid);
+                        task.setNcontent(ncontent);
+                        task.setNfinish(nfinish);
+                        task.setaTime(nTime);
+                        task.setNotetime(notetime);
+                        task.setNtasktime(ntasktime);
+                        //添加到任务表中
+                        tasks.add(task);
+                    }
+
+                } while (cs.moveToNext());
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return tasks;
+
     }
 }

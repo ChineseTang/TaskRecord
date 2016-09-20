@@ -174,7 +174,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                                 if (id == -1) {
                                     //新建一个TaskType类型
                                     Tasktype tt = new Tasktype(et.getText().toString());
-                                    boolean rs = new TasktypeController().addType(newtype);
+                                    boolean rs = new TasktypeController().addType(newtype,AppApplication.getUser().getuId());
                                     //如果为真，那么添加成功，否则提示添加失败
                                     if (rs) {
                                         // 建立Adapter并且绑定数据源
@@ -237,7 +237,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
         content.setSaveEnabled(false);
         stypes.setSaveEnabled(false);
         submitbutton.setSaveEnabled(false);
-        types = new TasktypeController().selectAllTypes();
+        types = new TasktypeController().selectAllTypes(AppApplication.getUser().getuId());
         // 建立Adapter并且绑定数据源
         tasktypeAdapter = new ArrayAdapter(AppApplication.getContext(),R.layout.tasktype_item,types);
         //数据

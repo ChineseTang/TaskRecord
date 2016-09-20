@@ -136,7 +136,7 @@ public class ShowFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 new NewtaskController().deleteTaskById(task.getNtId());
-                                tasks.remove(positionin);
+                                tasks.remove(positionin); //monthDateView.postInvalidate();
                                 taskadapter.notifyDataSetChanged();
                             }
                         });
