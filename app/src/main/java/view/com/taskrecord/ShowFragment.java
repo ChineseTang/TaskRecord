@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -109,6 +110,7 @@ public class ShowFragment extends Fragment {
                 taskadapter = new TaskAdapter(AppApplication
                         .getContext(), R.layout.task_item, tasks);
                 tasklist.setAdapter(taskadapter);
+                setListViewHeightBasedOnChildren(tasklist);
             }
         });
 
@@ -137,6 +139,7 @@ public class ShowFragment extends Fragment {
                             public void onClick(DialogInterface arg0, int arg1) {
                                 new NewtaskController().deleteTaskById(task.getNtId());
                                 tasks.remove(positionin); //monthDateView.postInvalidate();
+                                setListViewHeightBasedOnChildren(tasklist);
                                 taskadapter.notifyDataSetChanged();
                             }
                         });
@@ -158,6 +161,7 @@ public class ShowFragment extends Fragment {
                                             AppApplication.getContext(),
                                             R.layout.task_item, tasks);
                                     tasklist.setAdapter(taskadapter);
+                                    setListViewHeightBasedOnChildren(tasklist);
                                     taskadapter.notifyDataSetChanged();
                                 }
                             });
@@ -177,6 +181,7 @@ public class ShowFragment extends Fragment {
                                             AppApplication.getContext(),
                                             R.layout.task_item, tasks);
                                     tasklist.setAdapter(taskadapter);
+                                    setListViewHeightBasedOnChildren(tasklist);
                                     taskadapter.notifyDataSetChanged();
                                 }
                             });
@@ -203,6 +208,7 @@ public class ShowFragment extends Fragment {
         taskadapter = new TaskAdapter(AppApplication.getContext(),
                 R.layout.task_item, tasks);
         tasklist.setAdapter(taskadapter);
+        setListViewHeightBasedOnChildren(tasklist);
         drawMonthColors(datetime);
         setOnlistener();
         return view;
@@ -259,6 +265,7 @@ public class ShowFragment extends Fragment {
                 taskadapter = new TaskAdapter(AppApplication
                         .getContext(), R.layout.task_item, tasks);
                 tasklist.setAdapter(taskadapter);
+                setListViewHeightBasedOnChildren(tasklist);
             }
         });
 
@@ -279,6 +286,7 @@ public class ShowFragment extends Fragment {
                 taskadapter = new TaskAdapter(AppApplication
                         .getContext(), R.layout.task_item, tasks);
                 tasklist.setAdapter(taskadapter);
+                setListViewHeightBasedOnChildren(tasklist);
             }
         });
 
@@ -296,6 +304,8 @@ public class ShowFragment extends Fragment {
                 taskadapter = new TaskAdapter(AppApplication
                         .getContext(), R.layout.task_item, tasks);
                 tasklist.setAdapter(taskadapter);
+                //设置listview的高度
+                setListViewHeightBasedOnChildren(tasklist);
 
             }
         });
@@ -357,5 +367,28 @@ public class ShowFragment extends Fragment {
             }
             return false;
         }
+    }
+    /**
+     * 设置ListView的高度
+     * @param listView
+     */
+    private void setListViewHeightBasedOnChildren(ListView listView) {
+
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 }

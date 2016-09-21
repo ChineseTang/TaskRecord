@@ -139,7 +139,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                             getActivity(),AlertDialog.THEME_HOLO_LIGHT);
                     final EditText et = new EditText(getActivity());
                     et.setMinHeight(300);
-                    et.setHint("请输入要添加的任务类型");
+                    et.setHint("请输入要添加的任务类型\n添加的类型不超过6个字");
                     et.setBackground(null);
                     et.setGravity(Gravity.TOP | Gravity.LEFT);
                     newdialog.setView(et);
@@ -157,7 +157,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                         public void onClick(DialogInterface arg0, int arg1) {
                             //首先判断是否存在该类型，如果存在，那么添加失败
                             String newtype = et.getText().toString();
-                            if (("").equals(newtype) || newtype == null) {
+                            if (("").equals(newtype) || newtype == null ) {
                                 stypes.setSelection(oldposition, true);
                                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                                 dialog.setTitle("添加失败");
@@ -169,25 +169,53 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                                     }
                                 });
                                 dialog.show();
-                            } else {
-                                int id = new TasktypeController().getSidByTstyle(newtype);
-                                if (id == -1) {
-                                    //新建一个TaskType类型
-                                    Tasktype tt = new Tasktype(et.getText().toString());
-                                    boolean rs = new TasktypeController().addType(newtype,AppApplication.getUser().getuId());
-                                    //如果为真，那么添加成功，否则提示添加失败
-                                    if (rs) {
-                                        // 建立Adapter并且绑定数据源
-                                        newtype = newtype + " ▼";
-                                        //types.add(newtype);
-                                        types.add(0, newtype);
-                                        tasktypeAdapter.notifyDataSetChanged();
-                                        stypes.setSelection(types.indexOf(newtype), true);
+                            } else if(newtype.length() > 6) {
+                                stypes.setSelection(oldposition, true);
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+                                dialog.setTitle("添加失败");
+                                dialog.setMessage("添加的类型不超过6个字！");
+                                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+
+                                    }
+                                });
+                                dialog.show();
+                            }else
+                                {
+                                    int id = new TasktypeController().getSidByTstyle(newtype);
+                                    if (id == -1) {
+                                        //新建一个TaskType类型
+                                        Tasktype tt = new Tasktype(et.getText().toString());
+                                        boolean rs = new TasktypeController().addType(newtype,AppApplication.getUser().getuId());
+                                        //如果为真，那么添加成功，否则提示添加失败
+                                        if (rs) {
+                                            // 建立Adapter并且绑定数据源
+                                            newtype = newtype + " ▼";
+                                            //types.add(newtype);
+                                            types.add(0, newtype);
+                                            tasktypeAdapter.notifyDataSetChanged();
+                                            stypes.setSelection(types.indexOf(newtype), true);
+                                        } else {
+                                            stypes.setSelection(oldposition, true);
+                                            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+                                            dialog.setTitle("添加失败");
+                                            dialog.setMessage("不好意思，由于未知原因，添加失败，哈哈");
+                                            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface arg0, int arg1) {
+
+                                                }
+                                            });
+                                            dialog.show();
+                                        }
                                     } else {
                                         stypes.setSelection(oldposition, true);
+                                        //弹出dialog，显示该类型已经存在!
                                         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                                         dialog.setTitle("添加失败");
-                                        dialog.setMessage("不好意思，由于未知原因，添加失败，哈哈");
+                                        dialog.setMessage("该类型已经存在！");
+
                                         dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface arg0, int arg1) {
@@ -196,23 +224,9 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                                         });
                                         dialog.show();
                                     }
-                                } else {
-                                    stypes.setSelection(oldposition, true);
-                                    //弹出dialog，显示该类型已经存在!
-                                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
-                                    dialog.setTitle("添加失败");
-                                    dialog.setMessage("该类型已经存在！");
-
-                                    dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface arg0, int arg1) {
-
-                                        }
-                                    });
-                                    dialog.show();
                                 }
                             }
-                        }
+
                         });
                         newdialog.show();
                 }
@@ -306,7 +320,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                     boolean rs = new NewtaskController().updtateTask(newtask);
                     if (rs) {
                         // 如果插入成功，跳转到登录界面
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(
+                       /* AlertDialog.Builder dialog = new AlertDialog.Builder(
                                 getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                         dialog.setTitle("成功");
                         dialog.setMessage("修改任务成功");
@@ -318,7 +332,8 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
 
                                     }
                                 });
-                        dialog.show();
+                        dialog.show();*/
+                        Toast.makeText(getActivity(),"修改任务成功",Toast.LENGTH_SHORT).show();
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(content.getWindowToken(), 0);
                         content.setText(null);
@@ -422,8 +437,8 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
 
                         boolean rs = new NewtaskController().addTask(newtask);
                         if (rs) {
-                            // 如果插入成功，跳转到登录界面
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(
+                            // 如果插入成功，则toast 提示创建任务成功
+                          /*  AlertDialog.Builder dialog = new AlertDialog.Builder(
                                     getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                             dialog.setTitle("成功");
                             dialog.setMessage("创建任务成功");
@@ -435,7 +450,8 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
 
                                         }
                                     });
-                            dialog.show();
+                            dialog.show();*/
+                            Toast.makeText(getActivity(),"创建任务成功",Toast.LENGTH_SHORT).show();
                             InputMethodManager imm = (InputMethodManager) getActivity()
                                     .getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(content.getWindowToken(), 0);

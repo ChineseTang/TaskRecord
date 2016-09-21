@@ -26,7 +26,7 @@ public class MainTabActivity extends FragmentActivity {
                     R.drawable.tab_square_btn,R.drawable.tab_selfinfo_btn };
 
     // Tab选项卡的文字
-    private String mTextviewArray[] = { "展示", "任务", "查询", "我的" };
+    private String mTextviewArray[] = { "主页", "任务", "查询", "我的" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

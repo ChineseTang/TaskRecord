@@ -315,7 +315,28 @@ public class NewtaskController {
         return tasks;
 
     }
+    //查询所有的任务数目
+    public int searchAllTasksNumber(int uid) {
 
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        int alertCount = 0;
+        //查询语句
+        String sql = "select count(*) from Newtask where uid=" + uid;
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                alertCount = cs.getInt(0);
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return alertCount;
+
+    }
     /**
      * 查询完成的任务
      * @param uid
@@ -645,5 +666,73 @@ public class NewtaskController {
         //返回任务
         return tasks;
 
+    }
+    public int getTasktypeNumber(int sid , int uid) {
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        int alertCount = 0;
+        //查询语句
+        String sql = "select count(*) from Newtask where sid=" + sid +" and uid=" + uid;
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                alertCount = cs.getInt(0);
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return alertCount;
+    }
+
+    /**
+     * 根据用户id 和 类型id 返回该用户该类型的任务
+     * @param tsid
+     * @param uid
+     * @return
+     */
+    public ArrayList<Newtask> getTasksBytypeNumber(int tsid , int uid) {
+
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        ArrayList<Newtask> tasks = new ArrayList<Newtask>();
+        //查询语句
+        String sql = "select * from Newtask where sid=" + tsid +" and uid=" + uid;
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                do {
+                    int ntid = cs.getInt(cs.getColumnIndex("ntId"));
+                    int utid = cs.getInt(cs.getColumnIndex("uId"));
+                    int sid = cs.getInt(cs.getColumnIndex("sid"));
+                    String ncontent = cs.getString(cs.getColumnIndex("ncontent"));
+                    int nfinish = cs.getInt(cs.getColumnIndex("nfinish"));
+                    String nTime = cs.getString(cs.getColumnIndex("nTime"));
+                    String notetime = cs.getString(cs.getColumnIndex("notetime"));
+                    long ntasktime = cs.getLong(cs.getColumnIndex("ntasktime"));
+                    //创建一个任务
+                    Newtask task = new Newtask();
+
+                    task.setNtId(ntid);
+                    task.setuId(utid);
+                    task.setSid(sid);
+                    task.setNcontent(ncontent);
+                    task.setNfinish(nfinish);
+                    task.setaTime(nTime);
+                    task.setNotetime(notetime);
+                    task.setNtasktime(ntasktime);
+                    //添加到任务表中
+                    tasks.add(task);
+                } while (cs.moveToNext());
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return tasks;
     }
 }

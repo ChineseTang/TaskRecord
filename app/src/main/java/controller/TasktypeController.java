@@ -46,6 +46,31 @@ public class TasktypeController {
         }
         return types;
     }
+    public ArrayList<String> selectAllTypesWithoutSignal(int uid) {
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        ArrayList<String> types = new ArrayList<String>();
+        String sql = "select * from Tasktype where uid='0' or uid='" + uid + "' order by sid desc";
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                do {
+                    String tstype = cs.getString(cs.getColumnIndex("tstyle"));
+                    //消除自定义类型
+                    if(!("自定义".equals(tstype))) {
+                        //添加到任务表中
+                        types.add(tstype);
+                    }
+
+                } while (cs.moveToNext());
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return types;
+    }
     /**
      * 根据类型的名称 获得主键id
      */
