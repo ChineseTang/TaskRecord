@@ -7,14 +7,14 @@
             <!-- <solid android:color="#87CEFA" />   -->
             <solid android:color="#00aaff" />
             <!--圆角-->  
-            <corners android:radius="10dp" />
+            <corners android:radius="30dp" />
         </shape>  
     </item>  
     <!--默认背景-->  
     <item>  
         <shape>  
             <solid android:color="#00aaff" />  
-            <corners android:radius="10dp" />
+            <corners android:radius="30dp" />
         </shape>  
     </item>  
 </selector>  

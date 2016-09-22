@@ -3,20 +3,14 @@ package view.com.taskrecord;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +18,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 
+import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -50,20 +43,25 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import controller.AppApplication;
 import controller.NewtaskController;
 import controller.TasktypeController;
 import model.Newtask;
 import myadapter.TaskAdapter;
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
     private ArrayList<Newtask> tasks = new ArrayList<Newtask>();
   private Button searchComplete;
     private Button searchAlert;
     private Button searchWay;
     private Button searchTime;
+    private Button searchTimeDay;
    // private Spinner searchType;
     //private ArrayAdapter taskserachtypeAdapter;
     //private ArrayList<String> searchtype_list;
+    public static final String DATEPICKER_TAG = "datepicker";
     private ListView lv;
     PieData mPieData;
     private PieChart mChart;
@@ -81,6 +79,7 @@ public class SearchFragment extends Fragment {
     private int notalertnumber = 0;
     private int[] conditiontypes ={0,0,0};//完成情况，完成，未完成，逾期
     private ArrayList<String> xVals;
+    private View vline;
     private int tag = 0;//用于标记目前是哪个界面，是所有，未完，还是已完，用于在删除时判断跳转到哪个界面，默认是0
     //表示所有界面，1是完成，-1是未完成
     @Override
@@ -98,11 +97,13 @@ public class SearchFragment extends Fragment {
                 searchAlert.setTextColor(Color.WHITE);
                 searchWay.setTextColor(Color.WHITE);
                 searchTime.setTextColor(Color.WHITE);
+                searchTimeDay.setTextColor(Color.WHITE);
                 typesearchBarChart.setVisibility(View.GONE);
                 mChart.setVisibility(View.VISIBLE);
                 searchway = 0;
                 //2.设置图形的显示情况
                 showCompelte();
+                lv.setAdapter(null);
                 mChart.postInvalidate();
             }
         });
@@ -114,12 +115,14 @@ public class SearchFragment extends Fragment {
                 searchAlert.setTextColor(Color.rgb(250,167,50));
                 searchWay.setTextColor(Color.WHITE);
                 searchTime.setTextColor(Color.WHITE);
+                searchTimeDay.setTextColor(Color.WHITE);
                 typesearchBarChart.setVisibility(View.GONE);
                 mChart.setVisibility(View.VISIBLE);
                 //1.设置查询的类型
                 searchway = 1;
                 //2.设置图形的显示情况
                 showAlert();
+                lv.setAdapter(null);
                 //mChart.performClick();
                 mChart.postInvalidate();
             }
@@ -132,6 +135,7 @@ public class SearchFragment extends Fragment {
                 searchAlert.setTextColor(Color.WHITE);
                 searchWay.setTextColor(Color.rgb(250,167,50));
                 searchTime.setTextColor(Color.WHITE);
+                searchTimeDay.setTextColor(Color.WHITE);
                 //1.设置查询的类型
                 searchway = 2;
 
@@ -157,7 +161,9 @@ public class SearchFragment extends Fragment {
                         default: min = 100;break;
                     }
                 }
-
+                lv.setAdapter(null);
+                //lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
+                //setListViewHeightBasedOnChildren(lv);
 
                 setData(0,min,sum);
                 typesearchBarChart.postInvalidate();
@@ -168,14 +174,31 @@ public class SearchFragment extends Fragment {
         searchTime.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                vline.setVisibility(View.GONE);
                 searchComplete.setTextColor(Color.WHITE);
                 searchAlert.setTextColor(Color.WHITE);
                 searchWay.setTextColor(Color.WHITE);
                 searchTime.setTextColor(Color.rgb(250,167,50));
+                searchTimeDay.setTextColor(Color.WHITE);
                 //1.设置查询的类型
                 searchway = 3;
                 //2.设置图形的显示情况
-
+                searchTimeMethod();
+            }
+        });
+        searchTimeDay.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vline.setVisibility(View.GONE);
+                searchComplete.setTextColor(Color.WHITE);
+                searchAlert.setTextColor(Color.WHITE);
+                searchWay.setTextColor(Color.WHITE);
+                searchTime.setTextColor(Color.WHITE);
+                searchTimeDay.setTextColor(Color.rgb(250,167,50));
+                //1.设置查询的类型
+                searchway = 4;
+                //2.设置图形的显示情况
+                searchTimeMethod();
             }
         });
         //选择所有的任务
@@ -427,6 +450,7 @@ public class SearchFragment extends Fragment {
         searchAlert = (Button) view.findViewById(R.id.searchAlert);
         searchWay = (Button) view.findViewById(R.id.searchWay);
         searchTime = (Button) view.findViewById(R.id.searchTime);
+        searchTimeDay = (Button) view.findViewById(R.id.searchTimeDay);
         //searchType = (Spinner) view.findViewById(R.id.searchType);
         /*searchtype_list = new ArrayList<String>();
         searchtype_list.add("完成情况");
@@ -436,6 +460,7 @@ public class SearchFragment extends Fragment {
         taskserachtypeAdapter = new ArrayAdapter(AppApplication.getContext(),R.layout.tasktype_item,searchtype_list);
         taskserachtypeAdapter.setDropDownViewResource(R.layout.tasktype_item);
         searchType.setAdapter(taskserachtypeAdapter);*/
+        vline = view.findViewById(R.id.line);
         //设置饼状图
         mChart = (PieChart) view.findViewById(R.id.taskpc);
         //设置BarChart
@@ -473,7 +498,8 @@ public class SearchFragment extends Fragment {
     private void showCompelte() {
         switch (searchwaystate) {
             case -1:
-                tasks = new NewtaskController().searchAllTasks(AppApplication.getUser().getuId());
+                //tasks = new NewtaskController().searchAllTasks(AppApplication.getUser().getuId());
+                tasks = null;
                 break;
             case 0:
                 tasks = new NewtaskController().searchFinishTasks(AppApplication.getUser().getuId());
@@ -502,10 +528,10 @@ public class SearchFragment extends Fragment {
         //展示图形
         showChart(mChart, mPieData,sum);
         //设置listview的适配器，默认显示所有任务,根据用户选择选择不同类型的任务
-        taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks);
-        lv.setAdapter(taskadapter);
+        //taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks);
+        //lv.setAdapter(taskadapter);
         //设置listview的高度
-        setListViewHeightBasedOnChildren(lv);
+       // setListViewHeightBasedOnChildren(lv);
     }
 
     /**
@@ -517,7 +543,8 @@ public class SearchFragment extends Fragment {
     private void showAlert() {
         switch (searchwaystate) {
             case -1:
-                tasks = new NewtaskController().searchNotAlertTasks(AppApplication.getUser().getuId());
+                //tasks = new NewtaskController().searchNotAlertTasks(AppApplication.getUser().getuId());
+                tasks = null;
                 break;
             case 0:
                 tasks = new NewtaskController().searchAlertTasks(AppApplication.getUser().getuId());
@@ -543,10 +570,13 @@ public class SearchFragment extends Fragment {
         //展示图形
         showChart(mChart, mPieData,sum);
         //设置listview的适配器，默认显示所有任务,根据用户选择选择不同类型的任务
-        taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks);
-        lv.setAdapter(taskadapter);
-        //设置listview的高度
-        setListViewHeightBasedOnChildren(lv);
+        if(tasks != null ) {
+            taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks);
+            lv.setAdapter(taskadapter);
+            //设置listview的高度
+            setListViewHeightBasedOnChildren(lv);
+        }
+
     }
     private void showChart(PieChart pieChart, PieData pieData,int sum) {
 
@@ -814,5 +844,61 @@ public class SearchFragment extends Fragment {
             typesearchBarChart.animateXY(2000, 2000);
             typesearchBarChart.invalidate();
         }
+    }
+    private void searchTimeMethod() {
+            //弹出日历选择框
+        final Calendar calendar = Calendar.getInstance();
+       /* final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+                );*/
+        final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.setYearRange(2010, 2035);//设置年份区间
+        datePickerDialog.setCloseOnSingleTapDay(false);//选择后是否消失，推荐false
+        datePickerDialog.show(getActivity().getSupportFragmentManager(), DATEPICKER_TAG);//展示dialog，传一个tag参数
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+        month = month + 1;
+        String smonth = null;
+        String sday = null;
+        String gettime = null;
+        if(month >=0 && month<= 9) {
+            smonth = '0' + String.valueOf(month);
+        }else{
+            smonth = String.valueOf(month);
+        }
+        if(day >= 0 && day <= 9) {
+            sday = '0' + String.valueOf(day);
+        }else{
+            sday = String.valueOf(day);
+        }
+        //searchway等于3按月查询，等于4按日查询
+        if(searchway == 3) {
+            typesearchBarChart.setVisibility(View.GONE);
+            mChart.setVisibility(View.GONE);
+            gettime = year +"."+ smonth + "." ;
+            //然后去数据库里面根据日期查询
+            tasks = new NewtaskController().searchDrawByTime(AppApplication.getUser().getuId(),gettime);
+            lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
+            setListViewHeightBasedOnChildren(lv);
+
+            //Toast.makeText(getActivity(), gettime, Toast.LENGTH_LONG).show();
+        }else if(searchway == 4) {
+            gettime = year +"."+ smonth + "." + sday;
+            typesearchBarChart.setVisibility(View.GONE);
+            mChart.setVisibility(View.GONE);
+            tasks = new NewtaskController().searchDrawByTime(AppApplication.getUser().getuId(),gettime);
+            lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
+            setListViewHeightBasedOnChildren(lv);
+            //Toast.makeText(getActivity(),gettime, Toast.LENGTH_LONG).show();
+        }
+
     }
 }

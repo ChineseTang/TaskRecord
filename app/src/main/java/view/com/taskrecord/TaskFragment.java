@@ -3,33 +3,14 @@ package view.com.taskrecord;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
-import java.lang.reflect.Field;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import controller.AppApplication;
-import controller.NewtaskController;
-import controller.TasktypeController;
-import model.Newtask;
-import model.TUser;
-import model.Tasktype;
-import receiver.MyReceiver;
-
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,14 +19,28 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
-import com.melnykov.fab.FloatingActionButton;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import controller.AppApplication;
+import controller.NewtaskController;
+import controller.TasktypeController;
+import model.Newtask;
+import model.TUser;
+import model.Tasktype;
+import receiver.MyReceiver;
 public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSetListener{
     private Spinner submitbutton;
     private EditText content;
@@ -139,7 +134,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                             getActivity(),AlertDialog.THEME_HOLO_LIGHT);
                     final EditText et = new EditText(getActivity());
                     et.setMinHeight(300);
-                    et.setHint("请输入要添加的任务类型\n添加的类型不超过6个字");
+                    et.setHint("请输入要添加的任务类型\n添加的类型不超过3个字");
                     et.setBackground(null);
                     et.setGravity(Gravity.TOP | Gravity.LEFT);
                     newdialog.setView(et);
@@ -169,11 +164,11 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                                     }
                                 });
                                 dialog.show();
-                            } else if(newtype.length() > 6) {
+                            } else if(newtype.length() > 3) {
                                 stypes.setSelection(oldposition, true);
                                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                                 dialog.setTitle("添加失败");
-                                dialog.setMessage("添加的类型不超过6个字！");
+                                dialog.setMessage("添加的类型不超过3个字！");
                                 dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {

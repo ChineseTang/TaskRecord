@@ -3,15 +3,14 @@ package controller;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import db.TaskRecordOpenHelper;
 import model.Newtask;
@@ -93,7 +92,7 @@ public class NewtaskController {
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
-        String sql = "select * from Newtask where uid=" + uid + " and nTime like '" + gettime + "%'";
+        String sql = "select * from Newtask where uid=" + uid + " and nTime like '" + gettime + "%' order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -140,7 +139,7 @@ public class NewtaskController {
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
-        String sql = "select * from Newtask where notetime='不提醒' and uid=" + uid;
+        String sql = "select * from Newtask where notetime='不提醒' and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -187,7 +186,7 @@ public class NewtaskController {
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
-        String sql = "select * from Newtask where notetime!='不提醒' and uid=" + uid;
+        String sql = "select * from Newtask where notetime!='不提醒' and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -278,7 +277,7 @@ public class NewtaskController {
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
-        String sql = "select * from Newtask where uid=" + uid + " order by ntasktime desc";
+        String sql = "select * from Newtask where uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -348,7 +347,7 @@ public class NewtaskController {
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
-        String sql = "select * from Newtask where nfinish=1 and uid=" + uid + " order by ntasktime desc";
+        String sql = "select * from Newtask where nfinish=1 and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -397,7 +396,7 @@ public class NewtaskController {
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
-        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by ntasktime desc";
+        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -529,7 +528,7 @@ public class NewtaskController {
         String currentdate = format.format(new Date());
         int result = 0;
         //查询语句
-        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by ntasktime desc";
+        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -569,7 +568,7 @@ public class NewtaskController {
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         int result = 0;
         //查询语句
-        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by ntasktime desc";
+        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -625,7 +624,7 @@ public class NewtaskController {
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         int result = 0;
         //查询语句
-        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by ntasktime desc";
+        String sql = "select * from Newtask where nfinish=0 and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
@@ -699,7 +698,7 @@ public class NewtaskController {
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
-        String sql = "select * from Newtask where sid=" + tsid +" and uid=" + uid;
+        String sql = "select * from Newtask where sid=" + tsid +" and uid=" + uid + " order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {

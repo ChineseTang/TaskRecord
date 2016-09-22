@@ -14,65 +14,64 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_marginBottom="10dp"
+           android:weightSum="5"
+           android:gravity="center|center_horizontal|center_vertical"
            android:layout_marginTop="15dp"
            android:orientation="horizontal" >
 
            <Button
                android:id="@+id/searchComplete"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:layout_margin="3dp"
+               android:layout_width="45dp"
+               android:layout_height="45dp"
+               android:layout_margin="4dp"
                android:layout_weight="1"
-               android:background="@drawable/button"
-               android:paddingBottom="8dp"
-               android:paddingLeft="15dp"
-               android:paddingRight="15dp"
-               android:paddingTop="8dp"
+               android:background="@drawable/buttonrect"
                android:text="完成"
                android:textColor="#FFFFFF"
                android:textSize="16sp" />
 
            <Button
                android:id="@+id/searchAlert"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
+               android:layout_width="45dp"
+               android:layout_height="45dp"
+               android:layout_margin="4dp"
                android:layout_weight="1"
-               android:layout_margin="3dp"
-               android:background="@drawable/button"
+               android:background="@drawable/buttonrect"
                android:text="提醒"
-               android:paddingBottom="8dp"
-               android:paddingLeft="15dp"
-               android:paddingRight="15dp"
-               android:paddingTop="8dp"
                android:textColor="#FFFFFF"
                android:textSize="16sp" />
-
-           <Button
-           android:id="@+id/searchWay"
-           android:layout_width="0dp"
-           android:layout_height="wrap_content"
-           android:layout_weight="1"
-           android:layout_margin="3dp"
-           android:background="@drawable/button"
-           android:text="类型"
-           android:paddingBottom="8dp"
+         <!--  android:paddingBottom="8dp"
            android:paddingLeft="15dp"
            android:paddingRight="15dp"
-           android:paddingTop="8dp"
+           android:paddingTop="8dp"-->
+           <Button
+           android:id="@+id/searchWay"
+           android:layout_width="45dp"
+           android:layout_height="45dp"
+               android:layout_weight="1"
+               android:layout_margin="4dp"
+           android:background="@drawable/buttonrect"
+           android:text="类型"
            android:textColor="#FFFFFF"
            android:textSize="16sp" />
            <Button
                android:id="@+id/searchTime"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
+               android:layout_width="45dp"
+               android:layout_height="45dp"
                android:layout_weight="1"
-               android:layout_margin="3dp"
-               android:background="@drawable/button"
-               android:text="时间"
-               android:paddingBottom="8dp"
-               android:paddingLeft="15dp"
-               android:paddingRight="15dp"
-               android:paddingTop="8dp"
+               android:layout_margin="4dp"
+               android:background="@drawable/buttonrect"
+               android:text="按月"
+               android:textColor="#FFFFFF"
+               android:textSize="16sp" />
+           <Button
+               android:id="@+id/searchTimeDay"
+               android:layout_width="45dp"
+               android:layout_height="45dp"
+               android:layout_margin="4dp"
+               android:layout_weight="1"
+               android:background="@drawable/buttonrect"
+               android:text="按日"
                android:textColor="#FFFFFF"
                android:textSize="16sp" />
        </LinearLayout>
@@ -114,6 +113,7 @@
            android:layout_gravity="center|center_horizontal|center_vertical"
            android:layout_height="300dp" />
        <View
+           android:id="@+id/line"
            android:layout_width="match_parent"
            android:layout_height="1dp"
            android:layout_margin="2dp"

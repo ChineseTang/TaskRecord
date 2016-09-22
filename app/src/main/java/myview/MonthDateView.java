@@ -1,7 +1,5 @@
 package myview;
 
-import java.util.Calendar;
-import java.util.List;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +9,9 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class MonthDateView extends View{
 	private static final int NUM_COLUMNS = 7;
@@ -56,7 +57,7 @@ public class MonthDateView extends View{
 		mPaint.setTextSize(mDaySize*mDisplayMetrics.scaledDensity);
 		//设置圆圈大小
 		smCircleRadius = (float) (mDaySize*mDisplayMetrics.scaledDensity*1.05);
-		mCircleRadius =  (int) (mDaySize*mDisplayMetrics.scaledDensity*0.22);
+		mCircleRadius =  (int) (mDaySize*mDisplayMetrics.scaledDensity*0.21);
 		String dayString;
 		int mMonthDays = DateUtils.getMonthDays(mSelYear, mSelMonth);
 		int weekNumber = DateUtils.getFirstDayWeek(mSelYear, mSelMonth);
