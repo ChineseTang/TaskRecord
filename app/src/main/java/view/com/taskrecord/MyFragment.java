@@ -3,8 +3,6 @@ package view.com.taskrecord;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
-import java.io.File;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,8 +19,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.File;
 
 import controller.ActivityCollector;
 import controller.AppApplication;
@@ -31,22 +31,23 @@ import controller.AppApplication;
 public class MyFragment extends Fragment{
     private ImageView myphoto;
     private Uri imageUri;
-    private Button logoutbtn;
+    private TextView updatetype;
+    private TextView description;
+    private TextView about;
+    private TextView logouttv;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.activity_myfragment, container,false);
+        init(view);
 
-        myphoto = (ImageView) view.findViewById(R.id.photo);
-        logoutbtn = (Button) view.findViewById(R.id.logout);
         String filepath = "/sdcard/output_image.jpg";
         //获得头像
         //首先获得头像的路径，如果有头像，则改变，如果没有，那么就不显示
         //System.out.println(Environment.getExternalStorageDirectory() + "/" + "output_image.jpg");
-
-        //注销功能，跳转到登录界面
-        logoutbtn.setOnClickListener(new OnClickListener() {
+        logouttv.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -57,6 +58,14 @@ public class MyFragment extends Fragment{
                 startActivity(pagelogin);
                 getActivity().finish();
                 //System.exit(0);
+            }
+        });
+        about.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //弹出对话框,显示作品信息
+
             }
         });
         File myfile = new File(filepath);
@@ -103,6 +112,17 @@ public class MyFragment extends Fragment{
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
+    }
+    private void init(View view) {
+        myphoto = (ImageView) view.findViewById(R.id.photo);
+        updatetype = (TextView) view.findViewById(R.id.updatetype);
+        description = (TextView) view.findViewById(R.id.description);
+        about = (TextView) view.findViewById(R.id.about);
+        logouttv = (TextView) view.findViewById(R.id.logouttv);
+        logouttv.setFocusable(true);
+        about.setFocusable(true);
+        description.setFocusable(true);
+        updatetype.setFocusable(true);
     }
 }
 
