@@ -210,11 +210,9 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                                         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                                         dialog.setTitle("添加失败");
                                         dialog.setMessage("该类型已经存在！");
-
                                         dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface arg0, int arg1) {
-
                                             }
                                         });
                                         dialog.show();

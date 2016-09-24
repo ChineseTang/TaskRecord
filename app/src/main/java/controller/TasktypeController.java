@@ -3,6 +3,8 @@ package controller;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import java.util.ArrayList;
 import db.TaskRecordOpenHelper;
 /**
@@ -16,6 +18,24 @@ public class TasktypeController {
         TaskRecordOpenHelper to = new TaskRecordOpenHelper();
         SQLiteDatabase db = to.getConnection();
         String sql = "insert into Tasktype(tstyle,uid) values('"+newType + "','" + uid + "')";
+        try {
+            db.execSQL(sql);
+            db.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    /**
+     * 修改一条类型数据
+     */
+    public boolean updateType(String newType,int sid) {
+        TaskRecordOpenHelper to = new TaskRecordOpenHelper();
+        SQLiteDatabase db = to.getConnection();
+        //String sql = "insert into Tasktype(tstyle,uid) values('"+newType + "','" + uid + "')";
+        String sql = "update Tasktype set tstyle='" + newType + "' where sid=" + sid;
+        Log.w("task",sql);
         try {
             db.execSQL(sql);
             db.close();
