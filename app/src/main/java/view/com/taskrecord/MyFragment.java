@@ -3,11 +3,12 @@ package view.com.taskrecord;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,7 +19,6 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import controller.ActivityCollector;
@@ -44,7 +43,11 @@ public class MyFragment extends Fragment{
     private TextView description;
     private TextView about;
     private TextView logouttv;
+    private TextView emailaddr;
+    private TextView userName;
     private int selectedFruitIndex = 0;
+    private SharedPreferences pref;//用于设置注销状态
+    private SharedPreferences.Editor editor;
     private ArrayList<String> types;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +66,10 @@ public class MyFragment extends Fragment{
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 ActivityCollector.finishAll();
-                AppApplication.setLoginout(true);
+                //AppApplication.setLoginout(true);
+                editor = pref.edit();
+                editor.putBoolean("logout",true);
+                editor.commit();
                 Intent pagelogin = new Intent(getActivity(),MainActivity.class);
                 startActivity(pagelogin);
                 getActivity().finish();
@@ -180,7 +186,7 @@ public class MyFragment extends Fragment{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //去数据库中进行操作
-                                Log.w("tasktype","确认修改");
+                               // Log.w("tasktype","确认修改");
                                 String newtype = et.getText().toString();
                                 if (("").equals(newtype) || newtype == null ) {
 
@@ -216,8 +222,8 @@ public class MyFragment extends Fragment{
                                         if (rs) {
                                             // 建立Adapter并且绑定数据源
                                             //newtype = newtype + " ▼";
-                                            Log.w("tasktype","修改成功");
-                                            Log.w("tasktype",newtype);
+                                           // Log.w("tasktype","修改成功");
+                                            //Log.w("tasktype",newtype);
                                             Toast.makeText(getActivity(),"修改成功",Toast.LENGTH_SHORT).show();;
                                         } else {
                                             AlertDialog.Builder cdialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
@@ -250,7 +256,7 @@ public class MyFragment extends Fragment{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //去数据库中进行操作
-                                Log.w("tasktype","取消修改");
+                                //Log.w("tasktype","取消修改");
                             }
                         });
                         newdialog.show();
@@ -259,13 +265,13 @@ public class MyFragment extends Fragment{
                 dialog.show();
             }
         });
-        File myfile = new File(filepath);
+       /* File myfile = new File(filepath);
         if (myfile.exists()) {
             Bitmap bm = BitmapFactory.decodeFile(filepath);
             bm = makeRoundCorner(bm);
             //将图片显示到ImageView中
             myphoto.setImageBitmap(bm);
-        }
+        }*/
 
         return view;
     }
@@ -310,11 +316,17 @@ public class MyFragment extends Fragment{
         description = (TextView) view.findViewById(R.id.description);
         about = (TextView) view.findViewById(R.id.about);
         logouttv = (TextView) view.findViewById(R.id.logouttv);
+        userName = (TextView) view.findViewById(R.id.userName);
+        emailaddr = (TextView) view.findViewById(R.id.emailaddr);
         logouttv.setFocusable(true);
         about.setFocusable(true);
         description.setFocusable(true);
         updatetype.setFocusable(true);
+        pref = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         types = null;
+        userName.setText(AppApplication.getUser().getuName());
+        emailaddr.setText(AppApplication.getUser().getuEmail());
+        //Log.w("taskemail",AppApplication.getUser().getuEmail());
     }
 }
 

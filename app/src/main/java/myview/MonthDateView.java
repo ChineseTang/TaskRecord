@@ -57,7 +57,7 @@ public class MonthDateView extends View{
 		mPaint.setTextSize(mDaySize*mDisplayMetrics.scaledDensity);
 		//设置圆圈大小
 		smCircleRadius = (float) (mDaySize*mDisplayMetrics.scaledDensity*1.05);
-		mCircleRadius =  (int) (mDaySize*mDisplayMetrics.scaledDensity*0.21);
+		mCircleRadius =  (int) (mDaySize*mDisplayMetrics.scaledDensity*0.18);
 		String dayString;
 		int mMonthDays = DateUtils.getMonthDays(mSelYear, mSelMonth);
 		int weekNumber = DateUtils.getFirstDayWeek(mSelYear, mSelMonth);
@@ -96,11 +96,11 @@ public class MonthDateView extends View{
 			canvas.drawText(dayString, startX, startY, mPaint);
 			//canvas.drawCircle(dayString, startX, startY, mPaint);
 			if(tv_date != null){
-				tv_date.setText(mSelYear + "年" + (mSelMonth + 1) + "月");
+				tv_date.setText(" " + mSelYear + "年" + (mSelMonth + 1) + "月");
 			}
 
 			if(tv_week != null){
-				tv_week.setText("第" + weekRow  +"周");
+				tv_week.setText("第" + weekRow +"周");
 			}
 		}
 	}

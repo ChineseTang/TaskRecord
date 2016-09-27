@@ -30,4 +30,5 @@
     <color name="backgroudmdnew">#00aaff</color>
     <color name="maintabbackground">#FAA732</color>
     <color name="maintabbackgroudn2">#0088CC</color>
+    <color name="tabtextcolor">#363636</color>
 </resources>

@@ -3,18 +3,13 @@ package view.com.taskrecord;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,20 +18,24 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.melnykov.fab.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import controller.AppApplication;
 import controller.NewtaskController;
 import model.Newtask;
+import myadapter.TaskAdapter;
 import myview.MonthDateView;
 import myview.MonthDateView.DateClick;
-import com.melnykov.fab.FloatingActionButton;
-import myadapter.TaskAdapter;
 public class ShowFragment extends Fragment {
     private ImageView iv_left;
     private ImageView iv_right;
@@ -67,6 +66,7 @@ public class ShowFragment extends Fragment {
                 return gesture.onTouchEvent(event);//返回手势识别触发的事件
             }
         });*/
+        //用于添加新的任务，传递时间参数
       fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +76,7 @@ public class ShowFragment extends Fragment {
                 fth.setCurrentTab(1);
             }
         });
+        //设置日期 和 周数
         monthDateView.setTextView(tv_date, tv_week);
         monthDateView.setDateClick(new DateClick() {
             @Override
@@ -105,12 +106,16 @@ public class ShowFragment extends Fragment {
                         + "." + sday;
                 touchTime = new String(gettime);
                 // 然后根据日期去数据库查找对应的当日任务
-                tasks = new NewtaskController().searchByTime(AppApplication
-                        .getUser().getuId(), gettime);
-                taskadapter = new TaskAdapter(AppApplication
+                /*tasks = new NewtaskController().searchByTime(AppApplication
+                        .getUser().getuId(), gettime);*/
+
+                //然后根据日期去AppApplication中的tasks中去遍历
+                tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(), gettime);
+                setTasks();
+                /*taskadapter = new TaskAdapter(AppApplication
                         .getContext(), R.layout.task_item, tasks);
                 tasklist.setAdapter(taskadapter);
-                setListViewHeightBasedOnChildren(tasklist);
+                setListViewHeightBasedOnChildren(tasklist);*/
             }
         });
 
@@ -203,17 +208,26 @@ public class ShowFragment extends Fragment {
         //2016.01.05
         String datetime = monthDateView.getTodayToView();
         //String newdatetime = datetime.substring(0, datetime.length()-2);
-        tasks = new NewtaskController().searchByTime(AppApplication.getUser()
-                .getuId(), datetime);
-        taskadapter = new TaskAdapter(AppApplication.getContext(),
+        /*tasks = new NewtaskController().searchByTime(AppApplication.getUser()
+                .getuId(), datetime);*/
+        //然后根据日期去AppApplication中的tasks中去遍历
+        tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(), datetime);
+        /*taskadapter = new TaskAdapter(AppApplication.getContext(),
                 R.layout.task_item, tasks);
         tasklist.setAdapter(taskadapter);
-        setListViewHeightBasedOnChildren(tasklist);
+        setListViewHeightBasedOnChildren(tasklist);*/
+        //重新设置任务
+        setTasks();
         drawMonthColors(datetime);
         setOnlistener();
         return view;
     }
-
+    private void setTasks() {
+        taskadapter = new TaskAdapter(AppApplication.getContext(),
+                R.layout.task_item, tasks);
+        tasklist.setAdapter(taskadapter);
+        setListViewHeightBasedOnChildren(tasklist);
+    }
     /**
      * 初始化空间
      */
@@ -306,13 +320,15 @@ public class ShowFragment extends Fragment {
                 tasklist.setAdapter(taskadapter);
                 //设置listview的高度
                 setListViewHeightBasedOnChildren(tasklist);
-
             }
         });
     }
     private void drawMonthColors(String gettime) {
         String newgettime = gettime.substring(0, gettime.length()-2);
-        drawtasks = new NewtaskController().searchDrawByTime(AppApplication.getUser()
+        /*drawtasks = new NewtaskController().searchDrawByTime(AppApplication.getUser()
+                .getuId(), newgettime);*/
+        Log.w("newgettime",newgettime);
+        drawtasks = AppApplication.searchDrawByTime(AppApplication.getUser()
                 .getuId(), newgettime);
         //为任务当月画上小圆点
         if (drawtasks != null) {
@@ -324,13 +340,10 @@ public class ShowFragment extends Fragment {
     //设置手势识别监听器
     private class MyOnGestureListener extends GestureDetector.SimpleOnGestureListener
     {
-
         @Override//此方法必须重写且返回真，否则onFling不起效
         public boolean onDown(MotionEvent e) {
             return true;
         }
-
-
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if((e1.getX()- e2.getX()>120)&&Math.abs(velocityX)>200){
@@ -338,10 +351,6 @@ public class ShowFragment extends Fragment {
                 String gettime = monthDateView.onRightGetTime();
                 touchTime = new String(gettime);
                 drawMonthColors(gettime);
-				/*
-				 * Toast.makeText(AppApplication.getContext(), "点击了：" + gettime,
-				 * Toast.LENGTH_SHORT).show();
-				 */
                 tasks = new NewtaskController().searchByTime(AppApplication
                         .getUser().getuId(), gettime);
                 taskadapter = new TaskAdapter(AppApplication
@@ -373,19 +382,16 @@ public class ShowFragment extends Fragment {
      * @param listView
      */
     private void setListViewHeightBasedOnChildren(ListView listView) {
-
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             return;
         }
-
         int totalHeight = 0;
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
             listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
         }
-
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight
                 + (listView.getDividerHeight() * (listAdapter.getCount() - 1));

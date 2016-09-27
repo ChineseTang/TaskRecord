@@ -270,6 +270,8 @@ public class NewtaskController {
         //返回任务
         return alertCount;
     }
+
+
     //查询所有的任务
     public ArrayList<Newtask> searchAllTasks(int uid) {
 
@@ -699,6 +701,51 @@ public class NewtaskController {
         ArrayList<Newtask> tasks = new ArrayList<Newtask>();
         //查询语句
         String sql = "select * from Newtask where sid=" + tsid +" and uid=" + uid + " order by nTime desc";
+        Cursor cs = db.rawQuery(sql, null);
+        try {
+            if (cs.moveToFirst()) {
+                do {
+                    int ntid = cs.getInt(cs.getColumnIndex("ntId"));
+                    int utid = cs.getInt(cs.getColumnIndex("uId"));
+                    int sid = cs.getInt(cs.getColumnIndex("sid"));
+                    String ncontent = cs.getString(cs.getColumnIndex("ncontent"));
+                    int nfinish = cs.getInt(cs.getColumnIndex("nfinish"));
+                    String nTime = cs.getString(cs.getColumnIndex("nTime"));
+                    String notetime = cs.getString(cs.getColumnIndex("notetime"));
+                    long ntasktime = cs.getLong(cs.getColumnIndex("ntasktime"));
+                    //创建一个任务
+                    Newtask task = new Newtask();
+
+                    task.setNtId(ntid);
+                    task.setuId(utid);
+                    task.setSid(sid);
+                    task.setNcontent(ncontent);
+                    task.setNfinish(nfinish);
+                    task.setaTime(nTime);
+                    task.setNotetime(notetime);
+                    task.setNtasktime(ntasktime);
+                    //添加到任务表中
+                    tasks.add(task);
+                } while (cs.moveToNext());
+            }
+            cs.close();
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //返回任务
+        return tasks;
+    }
+    /**
+     * 查询所有任务存储到AppApplication中
+     * @return
+     */
+    public ArrayList<Newtask> searchAllTasksIntoApp() {
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        ArrayList<Newtask> tasks = new ArrayList<Newtask>();
+        //查询语句
+        String sql = "select * from Newtask order by nTime desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {

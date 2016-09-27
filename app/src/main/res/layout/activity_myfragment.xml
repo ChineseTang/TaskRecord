@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@drawable/bg2"
     android:fillViewport="true" >
 
     <LinearLayout
@@ -14,12 +14,12 @@
 
         <ImageView
             android:id="@+id/photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="45dp"
-            android:background="@drawable/ic_drawer" />
+            android:layout_marginTop="20dp"
+            android:background="@drawable/pika" />
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_marginBottom="5dp"
             android:background="@null"
             android:enabled="false"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:singleLine="true"
             android:text="空空"
             android:textSize="18sp" />
@@ -38,21 +38,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:orientation="vertical" >
-           <!-- <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="5dp"
-                android:background="#333333" />-->
             <!-- 邮箱 -->
             <TextView
                 android:id="@+id/emailaddr"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_horizontal|center|center_vertical"
+                android:background="@drawable/side"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#000000"
-                android:background="@null"
-                android:drawableLeft="@drawable/mail"
+                android:paddingTop="10dp"
+                android:textColor="#ffffff"
+                android:drawableLeft="@drawable/email"
                 android:drawablePadding="18dp"
                 android:enabled="false"
                 android:hint="@string/email"
@@ -60,92 +59,88 @@
                 android:singleLine="true"
                 android:text="tzjsmile@qq.com"
                 android:textSize="18sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="5dp"
-                android:background="#dddddd" />
 
             <TextView
                 android:id="@+id/updatetype"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_horizontal|center|center_vertical"
+                android:background="@drawable/side"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:clickable="true"
-                android:background="@null"
-                android:drawableLeft="@drawable/tasktype"
+                android:drawableLeft="@drawable/typeplus"
                 android:drawablePadding="18dp"
                 android:paddingLeft="25dp"
                 android:singleLine="true"
                 android:text="设置任务类型"
+                android:paddingTop="10dp"
                 android:textSize="18sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="5dp"
-                android:background="#dddddd" />
             <!-- 邮箱 -->
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_horizontal|center|center_vertical"
+                android:background="@drawable/side"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#000000"
-                android:background="@null"
+                android:textColor="#ffffff"
                 android:clickable="true"
-                android:drawableLeft="@drawable/description"
-                android:drawablePadding="18dp"
-                android:paddingLeft="25dp"
+                android:drawableLeft="@drawable/descpic"
+                android:drawablePadding="22dp"
+                android:paddingLeft="27dp"
                 android:singleLine="true"
+                android:paddingTop="10dp"
                 android:text="使用说明"
                 android:textSize="18sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="5dp"
-                android:background="#dddddd" />
             <!-- 邮箱 -->
 
             <TextView
                 android:id="@+id/about"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_horizontal|center|center_vertical"
+                android:background="@drawable/side"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:clickable="true"
-                android:background="@null"
-                android:drawableLeft="@drawable/about"
+                android:drawableLeft="@drawable/aboutpic"
                 android:drawablePadding="18dp"
-                android:paddingLeft="25dp"
+                android:paddingLeft="22dp"
                 android:singleLine="true"
+                android:paddingTop="10dp"
                 android:text="关于app"
                 android:textSize="18sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="5dp"
-                android:background="#dddddd" />
             <!-- 邮箱 -->
 
             <TextView
                 android:id="@+id/logouttv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_horizontal|center|center_vertical"
+                android:background="@drawable/side"
                 android:layout_marginBottom="55dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#000000"
-                android:background="@null"
-                android:drawableLeft="@drawable/logoutimage"
-                android:drawablePadding="18dp"
+                android:textColor="#ffffff"
+                android:drawableLeft="@drawable/logoutpic"
+                android:drawablePadding="22dp"
                 android:paddingLeft="25dp"
                 android:clickable="true"
                 android:singleLine="true"
                 android:text="注销"
+                android:paddingTop="10dp"
                 android:textSize="18sp" />
 
             <!--<View
