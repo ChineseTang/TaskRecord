@@ -22,6 +22,7 @@ import android.widget.TextView;
 import controller.AppApplication;
 import controller.NewtaskController;
 import controller.TUserController;
+import controller.TasktypeController;
 import db.TaskRecordOpenHelper;
 import model.TUser;
 
@@ -86,6 +87,7 @@ public class MainActivity extends BaseActivity {
                  *  以上2,3,4都是在一个事务中进行的，要不都成功，要不都不成功，是一个事务
                  */
                 AppApplication.setTasks(new NewtaskController().searchAllTasksIntoApp());
+                AppApplication.setArraytypes(new TasktypeController().selectAllTypes(AppApplication.getUser().getuId()));
                 //默认保存用户信息到Preferences中
                 editor = pref.edit();
                 editor.putBoolean("rember_password", true);
@@ -152,8 +154,10 @@ public class MainActivity extends BaseActivity {
                          *  4、如果有修改的任务，那么就先修改，如果修改成功，再在AppAPplication中修改
                          *  以上2,3,4都是在一个事务中进行的，要不都成功，要不都不成功，是一个事务
                          */
-                        AppApplication.setTasks(new NewtaskController().searchAllTasksIntoApp());
                         AppApplication.setUser(rs);
+                       AppApplication.setTasks(new NewtaskController().searchAllTasksIntoApp());
+                        AppApplication.setArraytypes(new TasktypeController().selectAllTypes(AppApplication.getUser().getuId()));
+
                         Log.w("taskemial", rs.getuEmail()+ "");
                         Log.w("task",rs.getuId()+rs.getuName() + "");
                         //默认保存用户信息到Preferences中

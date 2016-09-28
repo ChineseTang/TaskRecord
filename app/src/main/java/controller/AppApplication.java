@@ -5,7 +5,6 @@ package controller;
  */
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -19,7 +18,15 @@ public class AppApplication extends Application {
     private static String touchtime;//存储添加任务的时间
     private static Newtask updatetask;//修改的任务
     private static ArrayList<Newtask> tasks;//存储所有的任务，方便查询，不用每次都去数据库中查询，提高效率
+    private static ArrayList<String> arraytypes;
 
+    public static ArrayList<String> getArraytypes() {
+        return arraytypes;
+    }
+
+    public static void setArraytypes(ArrayList<String> arraytypes) {
+        AppApplication.arraytypes = arraytypes;
+    }
 
     public static ArrayList<Newtask> getTasks() {
         return tasks;
@@ -98,11 +105,75 @@ public class AppApplication extends Application {
         //然后遍历tasks
         for (Newtask nt: tasks) {
             nttime = nt.getaTime().substring(0, gettime.length());
-            Log.w("tasktime",nttime);
+            //Log.w("tasktime",nttime);
             if(nt.getuId() == uid && nttime.equals(gettime)) {
                 searchByTimeTasks.add(nt);
             }
         }
         return searchByTimeTasks;
+    }
+
+    /**
+     * 根据任务ntid主键删除任务
+     * @param ntid
+     */
+    public static void deleteTaskByNtid(int ntid) {
+        for (Newtask nt: tasks) {
+            if(nt.getNtId() == ntid ) {
+                tasks.remove(nt);
+                break;
+            }
+        }
+    }
+
+    /**
+     * 更新任务的状态，将完成的任务更换为未完成的任务。
+     * @param ntid
+     */
+    public static void  changeToNotFinish(int ntid){
+        for (Newtask nt: tasks) {
+            if(nt.getNtId() == ntid ) {
+                nt.setNfinish(0);
+            }
+        }
+    }
+    /**
+     * 更新任务的状态，将未完成的任务更换为已完成的任务。
+     * @param ntid
+     */
+    public static void  changeToFinish(int ntid){
+        for (Newtask nt: tasks) {
+            if(nt.getNtId() == ntid ) {
+                nt.setNfinish(1);
+            }
+        }
+    }
+
+    /**
+     * 更新任务
+     * @param newtask
+     */
+    public static void updateTask(Newtask newtask) {
+        int newtaskId = newtask.getNtId();
+        for (Newtask nt: tasks) {
+            if(nt.getNtId() == newtaskId ) {
+                //更新任务
+                nt.setNcontent(newtask.getNcontent());
+                nt.setSid(newtask.getSid());
+                nt.setNfinish(newtask.getNfinish());
+                nt.setaTime(newtask.getaTime());
+                nt.setNotetime(newtask.getNotetime());
+                nt.setNtasktime(newtask.getNtasktime());
+                break;
+            }
+        }
+    }
+
+    /**
+     * 添加新的任务
+     * @param newtask
+     */
+    public static void addTask(Newtask newtask) {
+        tasks.add(newtask);
     }
 }

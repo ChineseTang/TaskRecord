@@ -3,9 +3,9 @@ package controller;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
+
 import db.TaskRecordOpenHelper;
 /**
  * Created by tangzhijing on 2016/9/5.
@@ -20,6 +20,8 @@ public class TasktypeController {
         String sql = "insert into Tasktype(tstyle,uid) values('"+newType + "','" + uid + "')";
         try {
             db.execSQL(sql);
+            //往AppApplication中添加新类型
+            AppApplication.getArraytypes().add(newType);
             db.close();
             return true;
         } catch (SQLException e) {
@@ -35,7 +37,7 @@ public class TasktypeController {
         SQLiteDatabase db = to.getConnection();
         //String sql = "insert into Tasktype(tstyle,uid) values('"+newType + "','" + uid + "')";
         String sql = "update Tasktype set tstyle='" + newType + "' where sid=" + sid;
-        Log.w("task",sql);
+        //Log.w("task",sql);
         try {
             db.execSQL(sql);
             db.close();
@@ -49,12 +51,14 @@ public class TasktypeController {
         TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
         SQLiteDatabase db = tdb.getConnection();
         ArrayList<String> types = new ArrayList<String>();
-        String sql = "select * from Tasktype where uid='0' or uid='" + uid + "' order by sid desc";
+        //Log.w("taskuid",String.valueOf(uid));
+        String sql = "select * from Tasktype where uid=0 or uid=" + uid + " order by sid desc";
         Cursor cs = db.rawQuery(sql, null);
         try {
             if (cs.moveToFirst()) {
                 do {
-                    String tstype = cs.getString(cs.getColumnIndex("tstyle")) +" ▼";
+                    String tstype = cs.getString(cs.getColumnIndex("tstyle"));
+                    //Log.w("tasktype",tstype + " " + cs.getInt(cs.getColumnIndex("uid")));
                     //添加到任务表中
                     types.add(tstype);
                 } while (cs.moveToNext());

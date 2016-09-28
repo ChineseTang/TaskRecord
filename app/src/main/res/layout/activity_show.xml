@@ -34,7 +34,6 @@
             android:id="@+id/tv_today"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginRight="5dp"
             android:background="@drawable/now"
             android:gravity="center" />
         <!-- 显示年月-->
@@ -44,20 +43,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text=""
-            android:textColor="#000000"
-            android:textSize="22sp" />
+            android:text="2016年9月"
+            android:textColor="#363636"
+            android:textSize="20sp" />
         <!-- 显示星期-->
         <TextView
             android:id="@+id/week_text"
             style="@style/myschedule_current_month_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
-            android:text=""
-            android:textColor="#000000"
-            android:textSize="22sp" />
+            android:text="第5周"
+            android:textColor="#363636"
+            android:textSize="20sp" />
         <!-- 向右移动一个月-->
         <ImageView
             android:id="@+id/iv_right"

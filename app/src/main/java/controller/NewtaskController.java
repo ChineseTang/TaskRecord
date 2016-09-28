@@ -34,15 +34,21 @@ public class NewtaskController {
                 + newtask.getNotetime()
                 +"','"
                 + newtask.getNtasktime() + "')";
-       // Log.w("task",sql);
+        db.beginTransaction();
         try {
             db.execSQL(sql);
-            db.close();
-            return true;
+            //再在AppApplication中去将该条事务修改
+            AppApplication.addTask(newtask);
+            //设置事务成功
+            db.setTransactionSuccessful();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            //结束事务
+            db.endTransaction();
+            db.close();
         }
-        return false;
+        return true;
     }
     //根据日期查询当天的任务
     public ArrayList<Newtask> searchByTime(int uid,String gettime) {
@@ -441,22 +447,48 @@ public class NewtaskController {
     public boolean changeToFinish(int ntid) {
         TaskRecordOpenHelper to = new TaskRecordOpenHelper();
         SQLiteDatabase db = to.getConnection();
+        db.beginTransaction();
         String sql = "update Newtask set nfinish=1 where ntid=" + ntid;
-        db.execSQL(sql);
+        try {
+            db.execSQL(sql);
+            //再在AppApplication中去将该条事务的状态修改
+            AppApplication.changeToFinish(ntid);
+            //设置事务成功
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            //结束事务
+            db.endTransaction();
+            db.close();
+        }
         return true;
     }
 
 
     /**
-     * //更新任务的状态，将未完成的任务更换为已经完成的任务。
+     * //更新任务的状态，将完成的任务更换为已经未完成的任务。
      * @param ntid
      * @return
      */
     public boolean changeToNotFinish(int ntid) {
         TaskRecordOpenHelper to = new TaskRecordOpenHelper();
         SQLiteDatabase db = to.getConnection();
+        db.beginTransaction();
         String sql = "update Newtask set nfinish=0 where ntid=" + ntid;
-        db.execSQL(sql);
+        try {
+            db.execSQL(sql);
+            //再在AppApplication中去将该条事务的状态修改
+            AppApplication.changeToNotFinish(ntid);
+            //设置事务成功
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            //结束事务
+            db.endTransaction();
+            db.close();
+        }
         return true;
     }
     /**
@@ -467,8 +499,22 @@ public class NewtaskController {
     public boolean deleteTaskById(int ntid) {
         TaskRecordOpenHelper to = new TaskRecordOpenHelper();
         SQLiteDatabase db = to.getConnection();
+        //开启一个事务
+        db.beginTransaction();
         String sql = "delete from Newtask where ntid=" + ntid;
-        db.execSQL(sql);
+        try {
+            db.execSQL(sql);
+            //再在AppApplication中去将该条事务删除掉
+            AppApplication.deleteTaskByNtid(ntid);
+            //设置事务成功
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            //结束事务
+            db.endTransaction();
+            db.close();
+        }
         return true;
     }
     /**
@@ -483,9 +529,20 @@ public class NewtaskController {
                 + newtask.getaTime() +"',notetime='" + newtask.getNotetime()
                 + "',ntasktime=" + newtask.getNtasktime()
                 + " where ntId=" + newtask.getNtId();
-
-        //Log.d("taskrecord", sql);
-        db.execSQL(sql);
+        db.beginTransaction();
+        try {
+            db.execSQL(sql);
+            //再在AppApplication中去将该条事务修改
+            AppApplication.updateTask(newtask);
+            //设置事务成功
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            //结束事务
+            db.endTransaction();
+            db.close();
+        }
         return true;
     }
     /**

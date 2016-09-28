@@ -93,11 +93,11 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 //1.设置查询的类型
-                searchComplete.setTextColor(Color.rgb(250,167,50));
-                searchAlert.setTextColor(Color.WHITE);
-                searchWay.setTextColor(Color.WHITE);
-                searchTime.setTextColor(Color.WHITE);
-                searchTimeDay.setTextColor(Color.WHITE);
+                searchComplete.setTextColor(Color.rgb(255,255,255));
+                searchAlert.setTextColor(Color.rgb(54,54,54));
+                searchWay.setTextColor(Color.rgb(54,54,54));
+                searchTime.setTextColor(Color.rgb(54,54,54));
+                searchTimeDay.setTextColor(Color.rgb(54,54,54));
                 typesearchBarChart.setVisibility(View.GONE);
                 mChart.setVisibility(View.VISIBLE);
                 searchway = 0;
@@ -111,11 +111,11 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         searchAlert.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchComplete.setTextColor(Color.WHITE);
-                searchAlert.setTextColor(Color.rgb(250,167,50));
-                searchWay.setTextColor(Color.WHITE);
-                searchTime.setTextColor(Color.WHITE);
-                searchTimeDay.setTextColor(Color.WHITE);
+                searchComplete.setTextColor(Color.rgb(54,54,54));
+                searchAlert.setTextColor(Color.rgb(255,255,255));
+                searchWay.setTextColor(Color.rgb(54,54,54));
+                searchTime.setTextColor(Color.rgb(54,54,54));
+                searchTimeDay.setTextColor(Color.rgb(54,54,54));
                 typesearchBarChart.setVisibility(View.GONE);
                 mChart.setVisibility(View.VISIBLE);
                 //1.设置查询的类型
@@ -131,11 +131,11 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         searchWay.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchComplete.setTextColor(Color.WHITE);
-                searchAlert.setTextColor(Color.WHITE);
-                searchWay.setTextColor(Color.rgb(250,167,50));
-                searchTime.setTextColor(Color.WHITE);
-                searchTimeDay.setTextColor(Color.WHITE);
+                searchComplete.setTextColor(Color.rgb(54,54,54));
+                searchAlert.setTextColor(Color.rgb(54,54,54));
+                searchWay.setTextColor(Color.rgb(255,255,255));
+                searchTime.setTextColor(Color.rgb(54,54,54));
+                searchTimeDay.setTextColor(Color.rgb(54,54,54));
                 //1.设置查询的类型
                 searchway = 2;
 
@@ -175,11 +175,11 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 vline.setVisibility(View.GONE);
-                searchComplete.setTextColor(Color.WHITE);
-                searchAlert.setTextColor(Color.WHITE);
-                searchWay.setTextColor(Color.WHITE);
-                searchTime.setTextColor(Color.rgb(250,167,50));
-                searchTimeDay.setTextColor(Color.WHITE);
+                searchComplete.setTextColor(Color.rgb(54,54,54));
+                searchAlert.setTextColor(Color.rgb(54,54,54));
+                searchWay.setTextColor(Color.rgb(54,54,54));
+                searchTime.setTextColor(Color.rgb(255,255,255));
+                searchTimeDay.setTextColor(Color.rgb(54,54,54));
                 //1.设置查询的类型
                 searchway = 3;
                 //2.设置图形的显示情况
@@ -190,11 +190,11 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onClick(View v) {
                 vline.setVisibility(View.GONE);
-                searchComplete.setTextColor(Color.WHITE);
-                searchAlert.setTextColor(Color.WHITE);
-                searchWay.setTextColor(Color.WHITE);
-                searchTime.setTextColor(Color.WHITE);
-                searchTimeDay.setTextColor(Color.rgb(250,167,50));
+                searchComplete.setTextColor(Color.rgb(54,54,54));
+                searchAlert.setTextColor(Color.rgb(54,54,54));
+                searchWay.setTextColor(Color.rgb(54,54,54));
+                searchTime.setTextColor(Color.rgb(54,54,54));
+                searchTimeDay.setTextColor(Color.rgb(255,255,255));
                 //1.设置查询的类型
                 searchway = 4;
                 //2.设置图形的显示情况

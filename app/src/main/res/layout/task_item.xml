@@ -50,7 +50,7 @@
                     android:ellipsize="end"
                     android:gravity="left"
                     android:maxEms="14"
-                    android:textColor="#333333"
+                    android:textColor="#363636"
                     android:singleLine="true"
                     android:textSize="18sp" />
                 </LinearLayout>

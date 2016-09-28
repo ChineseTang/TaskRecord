@@ -71,6 +71,9 @@ public class MyFragment extends Fragment{
                 editor.putBoolean("logout",true);
                 editor.commit();
                 Intent pagelogin = new Intent(getActivity(),MainActivity.class);
+                AppApplication.setUser(null);
+                AppApplication.setTasks(null);
+                AppApplication.setArraytypes(null);
                 startActivity(pagelogin);
                 getActivity().finish();
                 //System.exit(0);

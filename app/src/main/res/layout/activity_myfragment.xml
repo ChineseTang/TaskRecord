@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg2"
+    android:background="#ffffff"
     android:fillViewport="true" >
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_marginBottom="5dp"
             android:background="@null"
             android:enabled="false"
-            android:textColor="#ffffff"
+            android:textColor="#363636"
             android:singleLine="true"
             android:text="空空"
             android:textSize="18sp" />
@@ -50,7 +50,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
                 android:paddingTop="10dp"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:drawableLeft="@drawable/email"
                 android:drawablePadding="18dp"
                 android:enabled="false"
@@ -70,7 +70,7 @@
                 android:background="@drawable/side"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:clickable="true"
                 android:drawableLeft="@drawable/typeplus"
                 android:drawablePadding="18dp"
@@ -91,7 +91,7 @@
                 android:background="@drawable/side"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:clickable="true"
                 android:drawableLeft="@drawable/descpic"
                 android:drawablePadding="22dp"
@@ -112,14 +112,14 @@
                 android:background="@drawable/side"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:clickable="true"
                 android:drawableLeft="@drawable/aboutpic"
                 android:drawablePadding="18dp"
                 android:paddingLeft="22dp"
                 android:singleLine="true"
                 android:paddingTop="10dp"
-                android:text="关于app"
+                android:text="关于空空清单"
                 android:textSize="18sp" />
             <!-- 邮箱 -->
 
@@ -133,7 +133,7 @@
                 android:background="@drawable/side"
                 android:layout_marginBottom="55dp"
                 android:layout_marginTop="6dp"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:drawableLeft="@drawable/logoutpic"
                 android:drawablePadding="22dp"
                 android:paddingLeft="25dp"
