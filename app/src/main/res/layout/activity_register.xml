@@ -76,7 +76,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:textColorHint="#ffffff"
-                android:drawableLeft="@drawable/email"
+                android:drawableLeft="@drawable/email2"
                 android:hint="@string/email"
                 />
             <!--  密码 -->

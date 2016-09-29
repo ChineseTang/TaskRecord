@@ -6,7 +6,10 @@ package controller;
 import android.app.Application;
 import android.content.Context;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import model.Newtask;
 import model.TUser;
@@ -73,7 +76,7 @@ public class AppApplication extends Application {
         AppApplication.user = user;
     }
 
-    /**
+    /**1
      * 根据用户的id和时间查询当天的任务
      * @param uid
      * @param gettime
@@ -92,7 +95,7 @@ public class AppApplication extends Application {
         return searchByTimeTasks;
     }
 
-    /**
+    /**2
      * 根据用户的id和时间选取一个时间段的
      * @param uid
      * @param gettime
@@ -113,7 +116,7 @@ public class AppApplication extends Application {
         return searchByTimeTasks;
     }
 
-    /**
+    /**3
      * 根据任务ntid主键删除任务
      * @param ntid
      */
@@ -126,7 +129,7 @@ public class AppApplication extends Application {
         }
     }
 
-    /**
+    /**4
      * 更新任务的状态，将完成的任务更换为未完成的任务。
      * @param ntid
      */
@@ -134,10 +137,11 @@ public class AppApplication extends Application {
         for (Newtask nt: tasks) {
             if(nt.getNtId() == ntid ) {
                 nt.setNfinish(0);
+                break;
             }
         }
     }
-    /**
+    /**5
      * 更新任务的状态，将未完成的任务更换为已完成的任务。
      * @param ntid
      */
@@ -145,11 +149,12 @@ public class AppApplication extends Application {
         for (Newtask nt: tasks) {
             if(nt.getNtId() == ntid ) {
                 nt.setNfinish(1);
+                break;
             }
         }
     }
 
-    /**
+    /**6
      * 更新任务
      * @param newtask
      */
@@ -169,11 +174,260 @@ public class AppApplication extends Application {
         }
     }
 
-    /**
+    /**7
      * 添加新的任务
      * @param newtask
      */
     public static void addTask(Newtask newtask) {
         tasks.add(newtask);
+    }
+
+    /**8
+     * 根据用户id查询已经完成的任务 ，nfinish = 1；
+     * @param uid
+     * @return
+     */
+    public static int searchCompleted(int uid) {
+        int sum = 0;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && nt.getNfinish() == 1) {
+                sum = sum + 1;
+            }
+        }
+        return sum;
+    }
+
+    /**9
+     * 返回未完成的数目
+     * 第一个是未完成的，第二个是逾期的
+     * @param uid
+     * @return
+     */
+    public static  int[] searchNotCompleted(int uid){
+        int[] finishOverdue = {0,0};
+        int finishCount = 0;
+        int overdueCount = 0;
+        DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        String currentdate = format.format(new Date());//目前日期
+        int result = 0;
+        String nTime = null;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && nt.getNfinish() == 0) {
+                nTime = nt.getaTime();
+                result = nTime.compareTo(currentdate);
+                if(result >= 0) {
+                    finishCount++;
+                }else{
+                    overdueCount++;
+                }
+            }
+        }
+        finishOverdue[0]= finishCount;
+        finishOverdue[1]= overdueCount;
+        return  finishOverdue;
+    }
+
+    /**10
+     * 根据用户id查询已经完成的任务
+     * @param uid
+     * @return
+     */
+    public static ArrayList<Newtask> searchFinishTasks(int uid) {
+        ArrayList<Newtask> ts = new ArrayList<Newtask>();
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && nt.getNfinish() == 1) {
+                ts.add(nt);
+            }
+        }
+        return ts;
+    }
+
+    /**11
+     * 查询未完成任务 不包括过期的
+     * @param uid
+     * @return
+     */
+    public static ArrayList<Newtask> searchNotCompleteTasks(int uid){
+        DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        String currentdate = format.format(new Date());
+        ArrayList<Newtask> ts = new ArrayList<Newtask>();
+        int result = 0;
+        String anTime = null;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && nt.getNfinish() == 0) {
+                anTime = nt.getaTime();
+                result = anTime.compareTo(currentdate);
+                if(result >= 0) {
+                    ts.add(nt);
+                }
+            }
+        }
+        return ts;
+    }
+
+    /**12
+     * 查询未完成任务 不包括过期的
+     * @param uid
+     * @return
+     */
+    public static ArrayList<Newtask> searchOverdueTasks(int uid) {
+        DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        String currentdate = format.format(new Date());
+        ArrayList<Newtask> ts = new ArrayList<Newtask>();
+        int result = 0;
+        String anTime = null;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && nt.getNfinish() == 0) {
+                anTime = nt.getaTime();
+                result = anTime.compareTo(currentdate);
+                if(result < 0) {
+                    ts.add(nt);
+                }
+            }
+        }
+        return ts;
+    }
+
+    /**13
+     * 根据用户id查询提醒的任务
+     * @param uid
+     * @return
+     */
+    public static ArrayList<Newtask> searchAlertTasks(int uid) {
+        ArrayList<Newtask> ts = new ArrayList<Newtask>();
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && !(nt.getNotetime().equals("不提醒"))) {
+                ts.add(nt);
+            }
+        }
+        return ts;
+    }
+
+    /**14
+     * 根据用户id查询未提醒的任务
+     * @param uid
+     * @return
+     */
+    public static ArrayList<Newtask> searchNotAlertTasks(int uid){
+        ArrayList<Newtask> ts = new ArrayList<Newtask>();
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && nt.getNotetime().equals("不提醒")) {
+                ts.add(nt);
+            }
+        }
+        return ts;
+    }
+
+    /**15
+     * 根据用户id查询提醒的数目
+     * @param uid
+     * @return
+     */
+    public static int searchAlertTasksNumber(int uid){
+        int alertCount = 0;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && !(nt.getNotetime().equals("不提醒"))) {
+                alertCount++;
+            }
+        }
+        return alertCount;
+    }
+    /**16
+     * 根据用户id查询不提醒的数目
+     * @param uid
+     * @return
+     */
+    public static int searchNotAlertTasksNumber(int uid){
+        int alertCount = 0;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid  && nt.getNotetime().equals("不提醒")) {
+                alertCount++;
+            }
+        }
+        return alertCount;
+    }
+
+    /**17
+     * 根据用户uid查询该用户的所有任务
+     * @param uid
+     * @return
+     */
+    public static int searchAllTasksNumber(int uid) {
+        int allCount = 0;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid ) {
+               allCount = allCount + 1;
+            }
+        }
+        return allCount;
+    }
+
+    /**18
+     * 查询除自定义之外的所有类型
+     * @param uid
+     * @return
+     */
+    public static ArrayList<String> selectAllTypesWithoutSignal(int uid){
+        ArrayList<String> types = new ArrayList<String>();
+        for(String tstype: arraytypes){
+            if(!("自定义".equals(tstype))) {
+                //添加到任务表中
+                types.add(tstype);
+            }
+        }
+        return types;
+    }
+
+    /**19
+     * 查询该类型的任务数目
+     * @param sid
+     * @param uid
+     * @return
+     */
+    public static int getTasktypeNumber(int sid , int uid) {
+        int typeCount = 0;
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid && nt.getSid() == sid) {
+               typeCount++;
+            }
+        }
+        return typeCount;
+    }
+
+    /**20
+     * 查询该类型的任务
+     * @param tsid
+     * @param uid
+     * @return
+     */
+    public static ArrayList<Newtask> getTasksBytypeNumber(int tsid , int uid){
+        ArrayList<Newtask> ts = new ArrayList<Newtask>();
+        for (Newtask nt: tasks) {
+            if(nt.getuId() == uid && nt.getSid() == tsid) {
+                ts.add(nt);
+            }
+        }
+        return ts;
+    }
+
+    /**21
+     * 根据用户的id和时间选取某天的事务
+     * @param uid
+     * @param gettime
+     * @return
+     */
+    public static ArrayList<Newtask> searchByDate(int uid,String gettime) {
+        //先新建返回的任务
+        ArrayList<Newtask>  searchByTimeTasks = new ArrayList<Newtask>();
+        String nttime = null;
+        //然后遍历tasks
+        for (Newtask nt: tasks) {
+            nttime = nt.getaTime();
+            //Log.w("tasktime",nttime);
+            if(nt.getuId() == uid && nttime.equals(gettime)) {
+                searchByTimeTasks.add(nt);
+            }
+        }
+        return searchByTimeTasks;
     }
 }
