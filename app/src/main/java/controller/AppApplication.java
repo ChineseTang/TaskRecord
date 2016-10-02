@@ -21,7 +21,7 @@ public class AppApplication extends Application {
     private static String touchtime;//存储添加任务的时间
     private static Newtask updatetask;//修改的任务
     private static ArrayList<Newtask> tasks;//存储所有的任务，方便查询，不用每次都去数据库中查询，提高效率
-    private static ArrayList<String> arraytypes;
+   /* private static ArrayList<String> arraytypes;
 
     public static ArrayList<String> getArraytypes() {
         return arraytypes;
@@ -29,7 +29,7 @@ public class AppApplication extends Application {
 
     public static void setArraytypes(ArrayList<String> arraytypes) {
         AppApplication.arraytypes = arraytypes;
-    }
+    }*/
 
     public static ArrayList<Newtask> getTasks() {
         return tasks;
@@ -367,7 +367,7 @@ public class AppApplication extends Application {
      * @param uid
      * @return
      */
-    public static ArrayList<String> selectAllTypesWithoutSignal(int uid){
+  /*  public static ArrayList<String> selectAllTypesWithoutSignal(int uid){
         ArrayList<String> types = new ArrayList<String>();
         for(String tstype: arraytypes){
             if(!("自定义".equals(tstype))) {
@@ -376,7 +376,7 @@ public class AppApplication extends Application {
             }
         }
         return types;
-    }
+    }*/
 
     /**19
      * 查询该类型的任务数目
@@ -430,4 +430,18 @@ public class AppApplication extends Application {
         }
         return searchByTimeTasks;
     }
+
+    /**22
+     * 更新任务类型
+     * @param oldtype
+     * @param newtype
+     */
+ /*   public static void updateArrayType(String oldtype,String newtype) {
+            for(String type :arraytypes) {
+                if(oldtype.equals(type)) {
+                    type = newtype;
+                    break;
+                }
+            }
+    }*/
 }

@@ -3,6 +3,7 @@ package view.com.taskrecord;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
+
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -47,6 +48,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
     private String scontent;
     private Spinner stypes;
     private String tasktype;
+    private View taskfragmentview;
     public static int currentIntent=0;
     private int sid;
     private int oldposition = 2;//存储任务类型的位置
@@ -56,20 +58,24 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
     private ArrayAdapter<String> arr_adapter;//data_list适配器
     private ArrayList<String> types;//类型存储
     final Calendar calendar = Calendar.getInstance();
+    private int chooseType = -1;
     final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false, false);
     public static final String TIMEPICKER_TAG = "timepicker";//显示提醒时间
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.simpletask_fragment, container, false);
+        taskfragmentview = inflater.inflate(R.layout.simpletask_fragment, container, false);
+        //设置home 和 后退键监听事件
         //初始化
-        init(view);
+        init(taskfragmentview);
        if (savedInstanceState != null) {
             TimePickerDialog tpd = (TimePickerDialog) getActivity().getSupportFragmentManager().findFragmentByTag(TIMEPICKER_TAG);
             if (tpd != null) {
                 tpd.setOnTimeSetListener(this);
             }
         }
+
         setAlert();
         //任务类型绑定 Adapter到控件
         tasktypeAdapter.setDropDownViewResource(R.layout.tasktype_item);
@@ -82,8 +88,11 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
         }else {
                 insertTask();
         }
-        return view;
+
+        return taskfragmentview;
     }
+
+
     //初始化控件
     private void init(View view) {
         submitbutton = (Spinner) view.findViewById(R.id.submittask);
@@ -93,7 +102,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
         content.setSaveEnabled(false);
         stypes.setSaveEnabled(false);
         submitbutton.setSaveEnabled(false);
-        types = AppApplication.getArraytypes();
+        types = new TasktypeController().selectAllTypes(AppApplication.getUser().getuId());
         // 建立Adapter并且绑定数据源
         tasktypeAdapter = new ArrayAdapter(AppApplication.getContext(),R.layout.tasktype_item,types);
         //数据
@@ -114,6 +123,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String note = data_list.get(position);
                 if(note.equals("提醒")){
+                    submitbutton.setSelection(data_list.indexOf("不提醒"), true);
                     //当点击提醒时，删除掉 不提醒 和 提醒 之外的所有选项
                     for (String deletestring: data_list) {
                         if(!(deletestring.equals("不提醒") || deletestring.equals("提醒"))){
@@ -130,6 +140,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
     }
     //设置类型监听
     private void setType() {
+
         stypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -143,6 +154,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                 }
                 //如果是自定义，那么添加内容
                 if(sid == 1) {
+                    stypes.setSelection(oldposition, true);
                     AlertDialog.Builder newdialog = new AlertDialog.Builder(
                             getActivity(),AlertDialog.THEME_HOLO_LIGHT);
                     final EditText et = new EditText(getActivity());
@@ -200,7 +212,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                                         // 建立Adapter并且绑定数据源
                                         //newtype = newtype + " ▼";
                                         //types.add(newtype);
-                                        //types.add(0, newtype);
+                                        types.add(0, newtype);
                                         tasktypeAdapter.notifyDataSetChanged();
                                         stypes.setSelection(types.indexOf(newtype), true);
                                     } else {
@@ -257,7 +269,7 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
         //1.获取sid
            int id = nt.getSid();
             String currenttype = new TasktypeController().getTstyleBySid(id);
-            currenttype = currenttype +" ▼";
+            //currenttype = currenttype +" ▼";
             stypes.setSelection(types.indexOf(currenttype),true);
             //stypes.setSelection(tasktypeAdapter.getPosition(currenttype),true);
         addnewtask.setOnClickListener(new OnClickListener() {

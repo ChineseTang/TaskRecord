@@ -35,9 +35,16 @@ public class NewtaskController {
                 +"','"
                 + newtask.getNtasktime() + "')";
         db.beginTransaction();
+        Cursor cursor = null;
         try {
             db.execSQL(sql);
-            //再在AppApplication中去将该条事务修改
+            //Log.w("tasknew",sql);
+            //查询该任务的主键
+            cursor = db.rawQuery("select last_insert_rowid() from NewTask",null);
+            int strid;
+            if(cursor.moveToFirst())
+                newtask.setNtId(cursor.getInt(0));
+            //Log.w("tasknew",String.valueOf(cursor.getInt(0)));
             AppApplication.addTask(newtask);
             //设置事务成功
             db.setTransactionSuccessful();
@@ -46,6 +53,8 @@ public class NewtaskController {
         }finally {
             //结束事务
             db.endTransaction();
+            if(cursor != null)
+                cursor.close();
             db.close();
         }
         return true;

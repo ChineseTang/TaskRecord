@@ -136,19 +136,24 @@ public class ShowFragment extends Fragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
-                                //String datetime = task.getaTime();
+                                String datetime = task.getaTime();
                                // Log.w("taskdelete",datetime);
                                 new NewtaskController().deleteTaskById(task.getNtId());
                              /*   tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(),datetime);
                                 setTasks();
                                 taskadapter.notifyDataSetChanged();*/
-                               tasks.remove(positionin); //monthDateView.postInvalidate();
-                                //如果任务为空，那么该日期的颜色应该去掉
-                               /* if(tasks.isEmpty()) {
-
-                                }*/
+                               /*tasks.remove(positionin); //monthDateView.postInvalidate();
                                 setListViewHeightBasedOnChildren(tasklist);
+                                monthDateView.invalidate();
+                                taskadapter.notifyDataSetChanged();*/
+                               // String datetime = monthDateView.getTodayToView();
+                                tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(), datetime);
+                                //重新设置任务
+                                setTasks();
+                                drawMonthColors(datetime);
                                 taskadapter.notifyDataSetChanged();
+                                monthDateView.invalidate();
+
                             }
                         });
                 //如果任务完成，那么可以修改为未完成

@@ -40,9 +40,9 @@ public class TaskRecordOpenHelper extends SQLiteOpenHelper {
     private final String tasktypedata0 = "insert into Tasktype(tstyle,uid) values('自定义','0')";
     private final String tasktypedata1 = "insert into Tasktype(tstyle,uid) values('学习','0')";
     private final String tasktypedata2 = "insert into Tasktype(tstyle,uid) values('工作','0')";
-    private final String tasktypedata3 = "insert into Tasktype(tstyle,uid) values('家庭','0')";
+    //private final String tasktypedata3 = "insert into Tasktype(tstyle,uid) values('家庭','0')";
     private final String tasktypedata4 = "insert into Tasktype(tstyle,uid) values('杂事','0')";
-    private final String tasktypedata5 = "insert into Tasktype(tstyle,uid) values('记账','0')";
+    //private final String tasktypedata5 = "insert into Tasktype(tstyle,uid) values('记账','0')";
     //private final String tasktypedata5 = "insert into tasktype(tstyle) values('自定义')";
     public static void setContext(Context context) {
         TaskRecordOpenHelper.context = context;
@@ -67,9 +67,9 @@ public class TaskRecordOpenHelper extends SQLiteOpenHelper {
         tasktypedatas.add(tasktypedata0);
         tasktypedatas.add(tasktypedata1);
         tasktypedatas.add(tasktypedata2);
-        tasktypedatas.add(tasktypedata3);
+        //tasktypedatas.add(tasktypedata3);
         tasktypedatas.add(tasktypedata4);
-        tasktypedatas.add(tasktypedata5);
+        //tasktypedatas.add(tasktypedata5);
         inertOrUpdateDateBatch(tasktypedatas,db);
     }
 
