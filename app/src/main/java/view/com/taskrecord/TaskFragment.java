@@ -58,7 +58,6 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
     private ArrayAdapter<String> arr_adapter;//data_list适配器
     private ArrayList<String> types;//类型存储
     final Calendar calendar = Calendar.getInstance();
-    private int chooseType = -1;
     final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false, false);
     public static final String TIMEPICKER_TAG = "timepicker";//显示提醒时间
 
@@ -213,6 +212,8 @@ public class TaskFragment extends Fragment implements TimePickerDialog.OnTimeSet
                                         //newtype = newtype + " ▼";
                                         //types.add(newtype);
                                         types.add(0, newtype);
+                                        //重新设置sid
+                                        sid = new TasktypeController().getSidByTstyle(newtype);
                                         tasktypeAdapter.notifyDataSetChanged();
                                         stypes.setSelection(types.indexOf(newtype), true);
                                     } else {
