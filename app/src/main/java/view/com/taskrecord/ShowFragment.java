@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,13 +30,14 @@ import java.util.List;
 
 import controller.AppApplication;
 import controller.NewtaskController;
+import controller.TaskAlertController;
 import model.Newtask;
 import myadapter.TaskAdapter;
 import myview.MonthDateView;
 import myview.MonthDateView.DateClick;
 public class ShowFragment extends Fragment {
-    private ImageView iv_left;
-    private ImageView iv_right;
+    private TextView iv_left;
+    private TextView iv_right;
     private TextView tv_date;
     private TextView tv_week;
     private TextView tv_today;
@@ -139,6 +139,8 @@ public class ShowFragment extends Fragment {
                                 String datetime = task.getaTime();
                                // Log.w("taskdelete",datetime);
                                 new NewtaskController().deleteTaskById(task.getNtId());
+                                //将该任务的所有通知全部修改成已经提醒的状态
+                                new TaskAlertController().ChangeToFinishByNtid(task.getNtId());
                              /*   tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(),datetime);
                                 setTasks();
                                 taskadapter.notifyDataSetChanged();*/
@@ -217,8 +219,8 @@ public class ShowFragment extends Fragment {
      * 初始化控件
      */
     private void init(View view) {
-        iv_left = (ImageView) view.findViewById(R.id.iv_left);
-        iv_right = (ImageView) view.findViewById(R.id.iv_right);
+        iv_left = (TextView) view.findViewById(R.id.iv_left);
+        iv_right = (TextView) view.findViewById(R.id.iv_right);
         monthDateView = (MonthDateView) view.findViewById(R.id.monthDateView);
         tv_date = (TextView) view.findViewById(R.id.date_text);
         tv_week = (TextView) view.findViewById(R.id.week_text);
@@ -357,5 +359,10 @@ public class ShowFragment extends Fragment {
         params.height = totalHeight
                 + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+    @Override
+    public void onDestroy() {
+        //AppApplication.destroyAllAlerts();
+        super.onDestroy();
     }
 }

@@ -13,6 +13,11 @@ import model.TUser;
 
 
 public class TUserController {
+    /**
+     * 判断用户名是否存在
+     * @param username
+     * @return 存在返回true
+     */
     public boolean isExistUsername(String username) {
         boolean rs = false;
         int returnback = 0;
@@ -56,6 +61,23 @@ public class TUserController {
         //插入数据
         db.insert("TUser", null, values);
 
+        tdb.close(db);
+        return true;
+    }
+
+    /**
+     * 更新用户名
+     * @param id
+     * @param newName
+     * @return
+     */
+    public boolean updateUserName(int  id,String newName) {
+
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        String sql = "update TUser set uName='" + newName + "' where uId=" + id;
+        AppApplication.getUser().setuName(newName);
+        db.execSQL(sql);
         tdb.close(db);
         return true;
     }

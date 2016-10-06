@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/pika" />
+            android:background="@drawable/ic_drawer" />
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_gravity="center_horizontal|center|center_vertical"
             android:layout_marginBottom="5dp"
             android:background="@null"
-            android:enabled="false"
+            android:clickable="true"
             android:textColor="#363636"
             android:singleLine="true"
             android:text="空空"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:orientation="vertical" >
-            <!-- 邮箱 -->
+            <!--&lt;!&ndash; 邮箱 &ndash;&gt;
             <TextView
                 android:id="@+id/emailaddr"
                 android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:paddingLeft="25dp"
                 android:singleLine="true"
                 android:text="tzjsmile@qq.com"
-                android:textSize="18sp" />
+                android:textSize="18sp" />-->
 
             <TextView
                 android:id="@+id/updatetype"

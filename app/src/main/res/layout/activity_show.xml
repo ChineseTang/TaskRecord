@@ -16,36 +16,47 @@
     <!-- 显示向左，向右，现在 ， 年月和 周 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="55dp"
         android:gravity="center"
         android:orientation="horizontal" >
         <!-- 向左移动一个月-->
-        <ImageView
-            android:id="@+id/iv_left"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/left_arrow"
-            android:contentDescription="@null" />
         <!-- 现在日期-->
         <TextView
+            android:id="@+id/iv_left"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textColor="#363636"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:background="@drawable/left_arrow"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="2dp"
+            android:contentDescription="@null" />
+        <TextView
             android:id="@+id/tv_today"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/now"
+            android:textSize="18sp"
+            android:textColor="#363636"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:gravity="center" />
-        <!-- 显示年月-->
         <TextView
             android:id="@+id/date_text"
             style="@style/myschedule_current_month_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="2016年9月"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:text="2016年11月第3周"
             android:textColor="#363636"
             android:textSize="20sp" />
+
+        <!-- 显示年月-->
+
         <!-- 显示星期-->
         <TextView
             android:id="@+id/week_text"
@@ -54,16 +65,21 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="第5周"
+            android:visibility="gone"
             android:textColor="#363636"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
         <!-- 向右移动一个月-->
-        <ImageView
+        <TextView
             android:id="@+id/iv_right"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textColor="#363636"
+            android:layout_marginLeft="2dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:background="@drawable/right_arrow"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="30dp"
-            android:background="@drawable/right_arrow"
             android:contentDescription="@null" />
     </LinearLayout>
   <!-- 显示日历 -->
@@ -71,7 +87,6 @@
         android:id="@+id/datashow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:orientation="vertical" >
         <!-- 显示星期-->
         <myview.WeekDayView

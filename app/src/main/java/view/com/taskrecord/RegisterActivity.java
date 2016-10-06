@@ -25,7 +25,7 @@ public class RegisterActivity extends BaseActivity {
     private ImageButton iback;
     private ImageView iphoto;
     private EditText eusername;
-    private EditText email;
+    //private EditText email;
     private EditText epwd;
     private EditText erepwd;
     private Button regbtn;
@@ -77,7 +77,7 @@ public class RegisterActivity extends BaseActivity {
             public void onClick(View arg0) {
                 //1 获得注册信息中的值
                 susername = eusername.getText().toString();
-                semail = email.getText().toString();
+                semail = "tzjsmile@qq.com";
                 spwd = epwd.getText().toString();
                 srpwd = erepwd.getText().toString();
                 //2 验证注册信息的值是否合理
@@ -222,7 +222,7 @@ public class RegisterActivity extends BaseActivity {
         iback = (ImageButton) findViewById(R.id.array);
         iphoto = (ImageView) findViewById(R.id.photo);
         eusername = (EditText) findViewById(R.id.userName);
-        email = (EditText) findViewById(R.id.emailaddr);
+        //email = (EditText) findViewById(R.id.emailaddr);
         epwd = (EditText) findViewById(R.id.pwd);
         erepwd = (EditText) findViewById(R.id.repwd);
         regbtn = (Button) findViewById(R.id.registerbtn);

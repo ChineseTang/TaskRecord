@@ -11,7 +11,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -86,6 +85,8 @@ public class MainActivity extends BaseActivity {
                  *  以上2,3,4都是在一个事务中进行的，要不都成功，要不都不成功，是一个事务
                  */
                 AppApplication.setTasks(new NewtaskController().searchAllTasksIntoApp());
+               /* Intent  intent = new Intent(MainActivity.this, MyService.class);
+                startService(intent);*/
                 //AppApplication.setArraytypes(new TasktypeController().selectAllTypes(AppApplication.getUser().getuId()));
                 //默认保存用户信息到Preferences中
                 editor = pref.edit();
@@ -157,8 +158,9 @@ public class MainActivity extends BaseActivity {
                        AppApplication.setTasks(new NewtaskController().searchAllTasksIntoApp());
                         //AppApplication.setArraytypes(new TasktypeController().selectAllTypes(AppApplication.getUser().getuId()));
 
-                        Log.w("taskemial", rs.getuEmail()+ "");
-                        Log.w("task",rs.getuId()+rs.getuName() + "");
+
+                        //Log.w("taskemial", rs.getuEmail()+ "");
+                        //Log.w("task",rs.getuId()+rs.getuName() + "");
                         //默认保存用户信息到Preferences中
                         editor = pref.edit();
                         editor.putBoolean("rember_password", true);

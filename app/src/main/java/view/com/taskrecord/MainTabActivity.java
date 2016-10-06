@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 
+import controller.AppApplication;
+
 public class MainTabActivity extends FragmentActivity {
     // 定义FragmentTabHost对象
     private FragmentTabHost mTabHost;
@@ -38,6 +40,7 @@ public class MainTabActivity extends FragmentActivity {
     }
     @Override
     protected void onDestroy() {
+        AppApplication.destroyAllAlerts();
         super.onDestroy();
     }
     // 初始化组件

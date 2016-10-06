@@ -36,6 +36,14 @@ public class TaskRecordOpenHelper extends SQLiteOpenHelper {
     private final String tasktype = "create table Tasktype(" +
             "sid INTEGER PRIMARY KEY autoincrement," +
             "tstyle varchar(64) not null,uid int not null)";
+    private final String taskalert = "create table Taskalert(" +
+            "aid INTEGER PRIMARY KEY autoincrement," +
+            "ntid int not null," +
+            "alertTime long not null," +
+            "alertContent text not null," +
+            "alertFinish int not null," +
+            "createTime long not null" +
+            ")";
     private List<String> tasktypedatas = new LinkedList<String>();
     private final String tasktypedata0 = "insert into Tasktype(tstyle,uid) values('自定义','0')";
     private final String tasktypedata1 = "insert into Tasktype(tstyle,uid) values('学习','0')";
@@ -63,6 +71,7 @@ public class TaskRecordOpenHelper extends SQLiteOpenHelper {
         db.execSQL(tuser);
         db.execSQL(newtask);
         db.execSQL(tasktype);
+        db.execSQL(taskalert);
         //往类型表里面插入几条数据
         tasktypedatas.add(tasktypedata0);
         tasktypedatas.add(tasktypedata1);

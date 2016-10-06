@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
+import controller.AppApplication;
+import controller.TaskAlertController;
+import model.TaskAlert;
 import view.com.taskrecord.MainTabActivity;
 import view.com.taskrecord.R;
 
@@ -22,24 +24,62 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
             //获得随机数
-            int number = (int)Math.round(Math.random()*100);
+            int number = (int)Math.round(Math.random()*1000);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, number,new Intent(context, MainTabActivity.class), 0);
             // 通过Notification.Builder来创建通知，注意API Level
-            String ct = intent.getStringExtra("ct");
-            //Log.w("task","收到了" + content);
-            Log.w("task","accept " + ct);
-            Notification notify = new Notification.Builder(context)
-                    .setSmallIcon(R.drawable.ic_drawer)
-                    .setTicker("空空任务提醒:" + "您设置的任务要到期了，请注意完成！")
-                    .setContentTitle("任务内容")
-                    .setContentText(ct)
-                    .setContentIntent(pendingIntent).build();
-            // FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。
-            notify.flags |= Notification.FLAG_AUTO_CANCEL;
-            // 在Android进行通知处理，首先需要重系统哪里获得通知管理器NotificationManager，它是一个系统Service。
-            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            // 通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
-            manager.notify(number, notify);
+           //获得TaskAlert对象
+           final TaskAlert  taskalert = (TaskAlert) intent.getSerializableExtra("taskalert");
+          //判断该taskalert 是否已经通知了
+          int getalert = new TaskAlertController().selectFinishOrNot(taskalert.getAid());
+          //如果已经为0 ，表示未通知
+          if(getalert == 0) {
+              if (taskalert != null) {
+                  // 添加到AppApplication中的ArrayList<Integer> alert
+                  //Integer i = new Integer(taskalert.getAid());
+                  //Log.w("taski",i + " ");
+                  // AppApplication.getAlert().add(i);
+                  new TaskAlertController().ChangeToFinish(taskalert.getAid());
+                  int rs = taskalert.getAlertFinish();
+                  Log.w("taskrem", AppApplication.getRs() + " " + taskalert.getAid() + " ");
+                  if (rs == 0 && AppApplication.getRs() != taskalert.getAid()) {
+                      AppApplication.setRs(taskalert.getAid());
+                      //然后去数据库中判断该任务是否已经提醒过没有
+                      Log.w("tasktest", taskalert.getAid() + taskalert.getAlertContent());
+                      // rs = new TaskAlertController().selectFinishOrNot(taskalert.getAid());
+                      //如果任务没有被提醒
+                      //if (rs == 0) {
+                      //String ct = intent.getStringExtra("ct");
+                      String ct = taskalert.getAlertContent();
+                      //Log.w("task","收到了" + content);
+                      //Log.w("task", "accept " + ct);
+                      Notification notify = new Notification.Builder(context)
+                              .setSmallIcon(R.drawable.ic_drawer)
+                              .setTicker("空空清单提醒:" + ct)
+                              .setContentTitle("任务内容")
+                              .setContentText(ct)
+                              .setContentIntent(pendingIntent).build();
+                      // FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。
+                      notify.flags |= Notification.FLAG_AUTO_CANCEL;
+                      // 在Android进行通知处理，首先需要重系统哪里获得通知管理器NotificationManager，它是一个系统Service。
+                      NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                      // 通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
+                      manager.notify(number, notify);
+                      //更新状态 运用观察者模式
+                      // AppApplication.getAlertnumber().notifyWatchers(taskalert.getAid());
+                      //最后在数据库中改变该任务的状态
+
+               /* new Thread(){
+                    public void run(){
+                        new TaskAlertController().ChangeToFinish(taskalert.getAid());
+                        System.out.println("Thread Running");
+                    }
+                }.start();*/
+
+                      //}
+                  }
+              }
+          }
+
     }
 
 }

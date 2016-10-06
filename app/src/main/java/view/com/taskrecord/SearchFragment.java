@@ -47,6 +47,7 @@ import java.util.Calendar;
 
 import controller.AppApplication;
 import controller.NewtaskController;
+import controller.TaskAlertController;
 import controller.TasktypeController;
 import model.Newtask;
 import myadapter.TaskAdapter;
@@ -780,6 +781,8 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                         String gettime = task.getaTime();
                         gettime  = gettime.substring(0, gettime.length()-2);//用于删除月份时用，重新按照时间查询
                         new NewtaskController().deleteTaskById(task.getNtId());
+                        //将该任务的所有通知全部修改成已经提醒的状态
+                        new TaskAlertController().ChangeToFinishByNtid(task.getNtId());
                         tasks.remove(position);
                         lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                         switch (searchway) {
@@ -1098,5 +1101,10 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         }
         timeSetComplet[0] = completeNumber;
         timeSetComplet[1] = notCompleteNumber;
+    }
+    @Override
+    public void onDestroy() {
+        //AppApplication.destroyAllAlerts();
+        super.onDestroy();
     }
 }

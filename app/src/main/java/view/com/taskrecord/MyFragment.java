@@ -33,6 +33,7 @@ import java.util.ArrayList;
 
 import controller.ActivityCollector;
 import controller.AppApplication;
+import controller.TUserController;
 import controller.TasktypeController;
 
 
@@ -43,7 +44,7 @@ public class MyFragment extends Fragment{
     private TextView description;
     private TextView about;
     private TextView logouttv;
-    private TextView emailaddr;
+    //private TextView emailaddr;
     private TextView userName;
     private int selectedFruitIndex = 0;
     private SharedPreferences pref;//用于设置注销状态
@@ -74,10 +75,84 @@ public class MyFragment extends Fragment{
                 AppApplication.setUser(null);
                 AppApplication.setTasks(null);
                 //AppApplication.setArraytypes(null);
+               // AppApplication.destroyAllAlerts();
                 startActivity(pagelogin);
                 getActivity().finish();
                 //System.exit(0);
             }
+        });
+        userName.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //弹出对话框,显示作品信息
+                AlertDialog.Builder newdialog = new AlertDialog.Builder(
+                        getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+                //不能有相同的类型
+                newdialog.setTitle("修改用户名");
+                final EditText et = new EditText(getActivity());
+                final String un = userName.getText().toString();
+                et.setText(un);
+                et.setSelection(un.length());
+                et.setEnabled(true);
+                et.setBackground(null);
+                et.setGravity(Gravity.TOP | Gravity.LEFT);
+                et.setMinHeight(250);
+                et.setTextColor(Color.rgb(51, 51, 51));
+                newdialog.setView(et);
+                newdialog.setPositiveButton("修改",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0,
+                                                int arg1) {
+                                //点击修改
+
+                                String newname = et.getText().toString();
+                                if (("").equals(newname) || newname == null) {
+
+                                    AlertDialog.Builder adialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+                                    adialog.setTitle("修改失败");
+                                    adialog.setMessage("用户名不能为空！");
+                                    adialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface arg0, int arg1) {
+
+                                        }
+                                    });
+                                    adialog.show();
+                                }else if(new TUserController().isExistUsername(newname)) {
+                                    //如果用户名已经存在
+                                    AlertDialog.Builder adialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+                                    adialog.setTitle("修改失败");
+                                    adialog.setMessage("用户名已经存在！");
+                                    adialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface arg0, int arg1) {
+
+                                        }
+                                    });
+                                    adialog.show();
+                                }else{
+
+                                    new TUserController().updateUserName(AppApplication.getUser().getuId(),newname);
+                                    editor = pref.edit();
+                                    editor.putString("uName", newname);
+                                    editor.commit();
+                                    Toast.makeText(getActivity(), "修改用户名成功", Toast.LENGTH_SHORT).show();
+                                    userName.setText(newname);
+                                }
+                            }
+                        });
+                newdialog.setNegativeButton("取消",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0,
+                                                int arg1) {
+                            }
+                        });
+                newdialog.show();
+            }
+
         });
         about.setOnClickListener(new OnClickListener() {
 
@@ -178,7 +253,7 @@ public class MyFragment extends Fragment{
                                 if(olduid == 0){
                                     AlertDialog.Builder adialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                                     adialog.setTitle("删除失败");
-                                    adialog.setMessage("    系统定义的类型不能删除\n包含(学习，工作，杂事)");
+                                    adialog.setMessage("    系统定义的类型不能删除\n    包含(学习，工作，杂事)");
                                     adialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface arg0, int arg1) {
@@ -220,7 +295,7 @@ public class MyFragment extends Fragment{
                         if (oldida == 0) {
                             AlertDialog.Builder adialog = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
                             adialog.setTitle("修改失败");
-                            adialog.setMessage("    系统定义的类型不能修改\n   包含(学习，工作，杂事)");
+                            adialog.setMessage("    系统定义的类型不能修改\n    包含(学习，工作，杂事)");
                             adialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface arg0, int arg1) {
@@ -381,7 +456,8 @@ public class MyFragment extends Fragment{
         about = (TextView) view.findViewById(R.id.about);
         logouttv = (TextView) view.findViewById(R.id.logouttv);
         userName = (TextView) view.findViewById(R.id.userName);
-        emailaddr = (TextView) view.findViewById(R.id.emailaddr);
+        //emailaddr = (TextView) view.findViewById(R.id.emailaddr);
+        userName.setFocusable(true);
         logouttv.setFocusable(true);
         about.setFocusable(true);
         description.setFocusable(true);
@@ -389,8 +465,13 @@ public class MyFragment extends Fragment{
         pref = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         types = null;
         userName.setText(AppApplication.getUser().getuName());
-        emailaddr.setText(AppApplication.getUser().getuEmail());
+        //emailaddr.setText(AppApplication.getUser().getuEmail());
         //Log.w("taskemail",AppApplication.getUser().getuEmail());
+    }
+    @Override
+    public void onDestroy() {
+       // AppApplication.destroyAllAlerts();
+        super.onDestroy();
     }
 }
 

@@ -17,9 +17,10 @@ import model.Newtask;
 
 public class NewtaskController {
     //添加任务
-    public boolean addTask(Newtask newtask) {
+    public int addTask(Newtask newtask) {
         TaskRecordOpenHelper to = new TaskRecordOpenHelper();
         SQLiteDatabase db = to.getConnection();
+        int rs = -1;
         String sql = "insert into NewTask(uId,sid,ncontent,nfinish,nTime,notetime,ntasktime) values('"
                 + newtask.getuId()
                 + "','"
@@ -42,8 +43,10 @@ public class NewtaskController {
             //查询该任务的主键
             cursor = db.rawQuery("select last_insert_rowid() from NewTask",null);
             int strid;
-            if(cursor.moveToFirst())
-                newtask.setNtId(cursor.getInt(0));
+            if(cursor.moveToFirst()) {
+                rs = cursor.getInt(0);
+                newtask.setNtId(rs);
+            }
             //Log.w("tasknew",String.valueOf(cursor.getInt(0)));
             AppApplication.addTask(newtask);
             //设置事务成功
@@ -57,7 +60,7 @@ public class NewtaskController {
                 cursor.close();
             db.close();
         }
-        return true;
+        return rs;
     }
     //根据日期查询当天的任务
     public ArrayList<Newtask> searchByTime(int uid,String gettime) {
