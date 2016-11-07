@@ -25,7 +25,7 @@
                android:layout_marginRight="5dp"
                android:background="@drawable/circleset2"
                android:text="完成"
-               android:textColor="#363636"
+               android:textColor="#ffffff"
                android:textSize="16sp" />
 
            <Button
@@ -36,7 +36,7 @@
                android:layout_marginRight="5dp"
                android:background="@drawable/circleset2"
                android:text="提醒"
-               android:textColor="#363636"
+               android:textColor="#ffffff"
                android:textSize="16sp" />
          <!--  android:paddingBottom="8dp"
            android:paddingLeft="15dp"
@@ -50,7 +50,7 @@
                android:layout_marginRight="5dp"
            android:background="@drawable/circleset2"
            android:text="类型"
-           android:textColor="#363636"
+           android:textColor="#ffffff"
            android:textSize="16sp" />
            <Button
                android:id="@+id/searchTime"
@@ -60,7 +60,7 @@
                android:layout_marginRight="8dp"
                android:background="@drawable/circleset2"
                android:text="按月"
-               android:textColor="#363636"
+               android:textColor="#ffffff"
                android:textSize="16sp" />
            <Button
                android:id="@+id/searchTimeDay"
@@ -70,7 +70,7 @@
                android:layout_marginRight="10dp"
                android:background="@drawable/circleset2"
                android:text="按日"
-               android:textColor="#363636"
+               android:textColor="#ffffff"
                android:textSize="16sp" />
        </LinearLayout>
     <!--<LinearLayout

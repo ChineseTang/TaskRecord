@@ -25,7 +25,7 @@ public class MainTabActivity extends FragmentActivity {
     private int mImageViewArray[] = { R.drawable.tab_home_btn, R.drawable.tab_message_btn,
                                          R.drawable.tab_square_btn,R.drawable.tab_selfinfo_btn };
     // Tab选项卡的文字
-    private String mTextviewArray[] = { "主页", "任务", "查询", "我的" };
+    private String mTextviewArray[] = { "主页", "清单", "查询", "我的" };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

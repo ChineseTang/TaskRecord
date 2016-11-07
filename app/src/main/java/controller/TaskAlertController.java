@@ -176,7 +176,6 @@ public class TaskAlertController {
                     String alertContent = cs.getString(cs.getColumnIndex("alertContent"));
                     int alertFinish = cs.getInt(cs.getColumnIndex("alertFinish"));
                     long createTime = cs.getLong(cs.getColumnIndex("createTime"));
-
                     //创建一个任务
                     TaskAlert taskalert = new TaskAlert();
                     taskalert.setAid(aid);

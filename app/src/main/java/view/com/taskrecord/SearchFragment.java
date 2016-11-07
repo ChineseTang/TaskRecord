@@ -6,12 +6,12 @@ package view.com.taskrecord;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,9 +58,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
     private Button searchWay;//按照类型查询
     private Button searchTime;//按照月份查询
     private Button searchTimeDay;//按照日期查询
-   // private Spinner searchType;
-    //private ArrayAdapter taskserachtypeAdapter;
-    //private ArrayList<String> searchtype_list;
     public static final String DATEPICKER_TAG = "datepicker";//设置显示日历
     private ListView lv;//显示任务的列表
     PieData mPieData;//显示数据
@@ -91,6 +88,8 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
     private int tag = 0;//用于标记目前是哪个界面，是所有，未完，还是已完，用于在删除时判断跳转到哪个界面，默认是0
     //表示所有界面，1是完成，-1是未完成
     private int completeflag = 0;
+    private SharedPreferences pref;//用于记录个人信息，是否记住密码
+    private SharedPreferences.Editor editor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,7 +119,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
      * @param view
      */
     private void init(View view) {
-        //tasks = new NewtaskController().searchAllTasks(AppApplication.getUser().getuId());
         lv = (ListView) view.findViewById(R.id.alltask);
        searchComplete = (Button) view.findViewById(R.id.searchComplete);
         searchAlert = (Button) view.findViewById(R.id.searchAlert);
@@ -162,42 +160,33 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         alertBarChart.setVisibility(View.GONE);
         timePieChart.setVisibility(View.GONE);
         xVals = new ArrayList<String>();
-        showCompelte();
-        searchComplete.setTextColor(Color.WHITE);
-        searchAlert.setTextColor(Color.rgb(54,54,54));
-        searchWay.setTextColor(Color.rgb(54,54,54));
-        searchTime.setTextColor(Color.rgb(54,54,54));
-        searchTimeDay.setTextColor(Color.rgb(54,54,54));
+        pref = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        switch (AppApplication.getSearchpage()) {
+            case 0:
+                setSearchCompleteMethod();
+                break;
+            case 1:
+                searchAlertMethod();
+                break;
+            case 2:
+                searchWayMethod();
+                break;
+            case 3:
+                searchTimeCallMethod();
+                break;
+            case 4:
+                searchTimeDayMethod();
+                break;
+            default:break;
+
+        }
+
     }
 
     /**
      * 显示所有任务的饼图，里面有完成，未完成和过期三种类型的任务
      */
     private void showCompelte() {
-        /*switch (searchwaystate) {
-            case -1:
-                //tasks = new NewtaskController().searchAllTasks(AppApplication.getUser().getuId());
-                //默认不显示任何内容
-                tasks = null;
-                break;
-            case 0:
-                //0表示选择了完成
-                //tasks = new NewtaskController().searchFinishTasks(AppApplication.getUser().getuId());
-                tasks = AppApplication.searchFinishTasks(AppApplication.getUser().getuId());
-                break;
-            case 1:
-                //1表示选择了未完成
-                //tasks = new NewtaskController().searchNotCompleteTasks(AppApplication.getUser().getuId());
-                tasks = AppApplication.searchNotCompleteTasks(AppApplication.getUser().getuId());
-                break;
-            case 2:
-                //2表示选择了过期
-                //tasks = new NewtaskController().searchOverdueTasks(AppApplication.getUser().getuId());
-                tasks = AppApplication.searchOverdueTasks(AppApplication.getUser().getuId());
-                break;
-            default:
-                break;
-        }*/
         //完成的数目
         //complete = new NewtaskController().searchCompleted(AppApplication.getUser().getuId());
         complete = AppApplication.searchCompleted(AppApplication.getUser().getuId());
@@ -207,10 +196,8 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         conditiontypes[0] = complete;//完成
         conditiontypes[1] = NotCompleted[0];//未完成
         conditiontypes[2] = NotCompleted[1];//逾期
-
         conditiontypes2[0] = complete;
         conditiontypes2[1] = NotCompleted[0];
-
         conditiontypes3[0] = complete;
         conditiontypes3[1] = NotCompleted[1];
         //总任务数目
@@ -231,17 +218,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         }
         //展示图形
         showChart(mChart, mPieData,sum);
-        //设置listview的适配器，默认显示所有任务,根据用户选择选择不同类型的任务
-        //taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks);
-        //lv.setAdapter(taskadapter);
-        //设置listview的高度
-       // setListViewHeightBasedOnChildren(lv);
-        /*if(tasks != null ) {
-            taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks);
-            lv.setAdapter(taskadapter);
-            //设置listview的高度
-            setListViewHeightBasedOnChildren(lv);
-        }*/
     }
 
     /**
@@ -253,25 +229,20 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
     private void showAlert() {
         switch (searchwaystate) {
             case -1:
-                //tasks = new NewtaskController().searchNotAlertTasks(AppApplication.getUser().getuId());
                 tasks = null;
                 break;
             case 0:
-                //tasks = new NewtaskController().searchAlertTasks(AppApplication.getUser().getuId());
                 tasks = AppApplication.searchAlertTasks(AppApplication.getUser().getuId());
                 break;
             case 1:
-                //tasks = new NewtaskController().searchNotAlertTasks(AppApplication.getUser().getuId());
                 tasks = AppApplication.searchNotAlertTasks(AppApplication.getUser().getuId());
                 break;
             default:
                 break;
         }
         //查询提醒的数目
-       // alertnumber = new NewtaskController().searchAlertTasksNumber(AppApplication.getUser().getuId());
         alertnumber = AppApplication.searchAlertTasksNumber(AppApplication.getUser().getuId());
         //查询未提醒的数目
-       //notalertnumber = new NewtaskController().searchNotAlertTasksNumber(AppApplication.getUser().getuId());
         notalertnumber = AppApplication.searchNotAlertTasksNumber(AppApplication.getUser().getuId());
         //查询提醒任务
 
@@ -296,7 +267,7 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
 
         pieChart.setNoDataTextDescription("您需要提供数据");
         //pieChart.setHoleColorTransparent(true);
-        pieChart.setHoleRadius(58f);  //半径
+        pieChart.setHoleRadius(48f);  //半径
         pieChart.setTransparentCircleRadius(30f); // 半透明圈
         //pieChart.setHoleRadius(0)  //实心圆
         //pieChart.setDescription("空空任务");
@@ -321,7 +292,7 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
 //      mChart.setOnChartValueSelectedListener(this);
         // mChart.setTouchEnabled(false);
 //      mChart.setOnAnimationListener(this);
-        pieChart.setCenterText("所有任务\n" + sum + "件");  //饼状图中间的文字
+        pieChart.setCenterText("所有清单\n" + sum + "件");  //饼状图中间的文字
         //设置数据
         pieChart.setData(pieData);
         //设置饼图右下角的文字大小
@@ -336,10 +307,14 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         mLegend.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);  //最右边显示RIGHT_OF_CHART
 //      mLegend.setForm(LegendForm.LINE);  //设置比例图的形状，默认是方形
         mLegend.setTextColor(Color.rgb(144, 144, 144));
-        mLegend.setTextSize(12f);
-        mLegend.setXEntrySpace(4f);
+        mLegend.setTextSize(10f);
+        mLegend.setXEntrySpace(6f);
         mLegend.setYEntrySpace(3f);
-        //pieChart.animateXY(2000, 2000);  //设置动画
+        boolean isRember = pref.getBoolean("dynamic", true);
+        if(isRember) {
+            pieChart.animateXY(1000, 1000);  //设置动画
+        }
+
         // mChart.spin(2000, 0, 360);
     }
     /**
@@ -350,16 +325,9 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
     private PieData getPieData(int count, String[] kinds,int[] rates,float range) {
 
         ArrayList<String> xValues = new ArrayList<String>();  //xVals用来表示每个饼块上的内容
-      /*  for (int i = 0; i < count; i++) {
-            xValues.add("Quarterly" + (i + 1));  //饼块上显示成Quarterly1, Quarterly2, Quarterly3, Quarterly4
-        }*/
         for(int i=0; i < count;i++) {
             xValues.add(kinds[i] + rates[i] + "件");
         }
-        /*xValues.add("未完成");
-        xValues.add("已完成");
-        xValues.add("不提醒");
-        xValues.add("提醒");*/
         ArrayList<Entry> yValues = new ArrayList<Entry>();  //yVals用来表示封装每个饼块的实际数据
         // 饼图数据
         /**
@@ -390,18 +358,21 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         //pieDataSet.notifyDataSetChanged();
         pieDataSet.setSliceSpace(3f); //设置个饼状图之间的距离
         // 部分区域被选中时多出的长度
-        pieDataSet.setSelectionShift(1f);
+        pieDataSet.setSelectionShift(4f);
         ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.JOYFUL_COLORS)
+        /*for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);*/
+        colors.add(Color.rgb(255, 247, 140));
+        colors.add(Color.rgb(140, 234, 255));
+        colors.add(Color.rgb(255, 228, 224));
+       /* for (int c : ColorTemplate.JOYFUL_COLORS)
             colors.add(c);
         for (int c : ColorTemplate.COLORFUL_COLORS)
             colors.add(c);
         for (int c : ColorTemplate.LIBERTY_COLORS)
             colors.add(c);
         for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
+            colors.add(c);*/
         colors.add(ColorTemplate.getHoloBlue());
         pieDataSet.setColors(colors);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -444,11 +415,7 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
     private void setData(int count, float range,int sum) {
         //1 找到所有的类型，这是x轴的数据集
         typesearchBarChart.setNoDataTextDescription("您需要提供数据");
-        //xVals = new TasktypeController().selectAllTypesWithoutSignal(AppApplication.getUser().getuId());
         xVals = new TasktypeController().selectAllTypesWithoutSignal(AppApplication.getUser().getuId());
-        /*for (int i = 0; i < count; i++) {
-            xVals.add(mMonths[i % 12]);
-        }*/
         count = xVals.size();
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();//设置y轴值
         String type = null;//类型
@@ -468,9 +435,14 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         }
         ArrayList<Integer> colors = new ArrayList<Integer>();
         //设置颜色
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+       for (int c : ColorTemplate.VORDIPLOM_COLORS)
             colors.add(c);
-      /*  for (int c : ColorTemplate.JOYFUL_COLORS)
+               /* colors.add(Color.rgb(192, 255, 140));
+                colors.add(Color.rgb(255, 247, 140));
+                colors.add(Color.rgb(255, 208, 140));
+                colors.add(Color.rgb(140, 234, 255));*/
+                colors.add(Color.rgb(255, 228, 224));
+      /* for (int c : ColorTemplate.JOYFUL_COLORS)
             colors.add(c);*/
        /* for (int c : ColorTemplate.COLORFUL_COLORS)
             colors.add(c);
@@ -538,18 +510,17 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
             //Typeface mTf  = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Regular.ttf");;
             //data.setValueTypeface(mTf);
             typesearchBarChart.setData(data);
-            typesearchBarChart.animateXY(2000, 2000);
+            //设置动画
+            boolean isRember = pref.getBoolean("dynamic", true);
+            if(isRember) {
+                typesearchBarChart.animateXY(1000, 1000);
+            }
             typesearchBarChart.invalidate();
         }
     }
     private void searchTimeMethod() {
             //弹出日历选择框
         final Calendar calendar = Calendar.getInstance();
-       /* final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-                );*/
         final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -598,20 +569,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
             //默认不显示任何内容
             lv.setAdapter(null);
             timePieChart.invalidate();
-            //设置listview的适配器，默认显示所有任务,根据用户选择选择不同类型的任务
-            //taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks);
-            //lv.setAdapter(taskadapter);
-            //设置listview的高度
-            // setListViewHeightBasedOnChildren(lv);
-            /*if(tasks != null ) {
-                taskadapter = new TaskAdapter(AppApplication.getContext(), R.layout.task_item, monthtasks);
-                lv.setAdapter(taskadapter);
-                //设置listview的高度
-                setListViewHeightBasedOnChildren(lv);
-            }*/
-            //lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
-            //setListViewHeightBasedOnChildren(lv);
-            //Toast.makeText(getActivity(), gettime, Toast.LENGTH_LONG).show();
         }else if(searchway == 4) {
             gettime = year +"."+ smonth + "." + sday;
             typesearchBarChart.setVisibility(View.GONE);
@@ -630,130 +587,150 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
         searchComplete.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchComplete.setTextColor(Color.WHITE);
-                searchAlert.setTextColor(Color.rgb(54,54,54));
-                searchWay.setTextColor(Color.rgb(54,54,54));
-                searchTime.setTextColor(Color.rgb(54,54,54));
-                searchTimeDay.setTextColor(Color.rgb(54,54,54));
-                //设置柱状图不显示，且不占位置
-                typesearchBarChart.setVisibility(View.GONE);
-                //设置piechart显示
-                mChart.setVisibility(View.VISIBLE);
-               //设置提醒piechart不显示
-                alertBarChart.setVisibility(View.GONE);
-                timePieChart.setVisibility(View.GONE);
-                //1.设置查询的类型
-                searchway = 0;
-                //2.设置图形的显示情况
-                showCompelte();
-                //默认不显示任何内容
-                lv.setAdapter(null);
-                mChart.postInvalidate();
+                setSearchCompleteMethod();
             }
         });
+    }
+    private void setSearchCompleteMethod() {
+        AppApplication.setSearchpage(0);
+        searchComplete.setBackgroundResource(R.drawable.circleset8);
+        searchAlert.setBackgroundResource(R.drawable.circleset2);
+        searchWay.setBackgroundResource(R.drawable.circleset2);
+        searchTime.setBackgroundResource(R.drawable.circleset2);
+        searchTimeDay.setBackgroundResource(R.drawable.circleset2);
+        //设置柱状图不显示，且不占位置
+        typesearchBarChart.setVisibility(View.GONE);
+        //设置piechart显示
+        mChart.setVisibility(View.VISIBLE);
+        //设置提醒piechart不显示
+        alertBarChart.setVisibility(View.GONE);
+        timePieChart.setVisibility(View.GONE);
+        //1.设置查询的类型
+        searchway = 0;
+        //2.设置图形的显示情况
+        showCompelte();
+        //默认不显示任何内容
+        lv.setAdapter(null);
+        mChart.postInvalidate();
     }
     private void searchAlertSetListener(){
         searchAlert.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //设置颜色
-                searchComplete.setTextColor(Color.rgb(54,54,54));
-                searchAlert.setTextColor(Color.WHITE);
-                searchWay.setTextColor(Color.rgb(54,54,54));
-                searchTime.setTextColor(Color.rgb(54,54,54));
-                searchTimeDay.setTextColor(Color.rgb(54,54,54));
-                typesearchBarChart.setVisibility(View.GONE);
-                mChart.setVisibility(View.GONE);
-                alertBarChart.setVisibility(View.VISIBLE);
-                timePieChart.setVisibility(View.GONE);
-                //1.设置查询的类型
-                searchway = 1;
-                //2.设置图形的显示情况
-                showAlert();
-                lv.setAdapter(null);
-                //mChart.performClick();
-                alertBarChart.postInvalidate();
+                searchAlertMethod();
             }
         });
+    }
+    private void searchAlertMethod() {
+        AppApplication.setSearchpage(1);
+        //设置颜色
+        searchComplete.setBackgroundResource(R.drawable.circleset2);
+        searchAlert.setBackgroundResource(R.drawable.circleset8);
+        searchWay.setBackgroundResource(R.drawable.circleset2);
+        searchTime.setBackgroundResource(R.drawable.circleset2);
+        searchTimeDay.setBackgroundResource(R.drawable.circleset2);
+        typesearchBarChart.setVisibility(View.GONE);
+        mChart.setVisibility(View.GONE);
+        alertBarChart.setVisibility(View.VISIBLE);
+        timePieChart.setVisibility(View.GONE);
+        //1.设置查询的类型
+        searchway = 1;
+        //2.设置图形的显示情况
+        showAlert();
+        lv.setAdapter(null);
+        //mChart.performClick();
+        alertBarChart.postInvalidate();
     }
     private void searchwaySetListener(){
         searchWay.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchComplete.setTextColor(Color.rgb(54,54,54));
-                searchAlert.setTextColor(Color.rgb(54,54,54));
-                searchWay.setTextColor(Color.rgb(255,255,255));
-                searchTime.setTextColor(Color.rgb(54,54,54));
-                searchTimeDay.setTextColor(Color.rgb(54,54,54));
-                //1.设置查询的类型
-                searchway = 2;
-                typesearchBarChart.setVisibility(View.VISIBLE);
-                mChart.setVisibility(View.GONE);
-                alertBarChart.setVisibility(View.GONE);
-                timePieChart.setVisibility(View.GONE);
-                //2.设置图形的显示情况
-                //int sum = new NewtaskController().searchAllTasksNumber(AppApplication.getUser().getuId());
-                int sum = AppApplication.searchAllTasksNumber(AppApplication.getUser().getuId());
-                int min = 20;
-                if(sum > 20 ) {
-                    int re = sum%20;
-                    switch (re) {
-                        case 1:
-                            min = 20;break;
-                        case 2:
-                            min = 30;break;
-                        case 3:
-                            min = 40;break;
-                        case 4:
-                            min = 50;break;
-                        case 5:
-                            min = 60;break;
-                        default: min = 100;break;
-                    }
-                }
-                lv.setAdapter(null);
-                //lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
-                //setListViewHeightBasedOnChildren(lv);
-
-                setData(0,min,sum);
-                typesearchBarChart.postInvalidate();
+                searchWayMethod();
             }
         });
+    }
+    private void searchWayMethod() {
+        AppApplication.setSearchpage(2);
+        searchComplete.setBackgroundResource(R.drawable.circleset2);
+        searchAlert.setBackgroundResource(R.drawable.circleset2);
+        searchWay.setBackgroundResource(R.drawable.circleset8);
+        searchTime.setBackgroundResource(R.drawable.circleset2);
+        searchTimeDay.setBackgroundResource(R.drawable.circleset2);
+        //1.设置查询的类型
+        searchway = 2;
+        typesearchBarChart.setVisibility(View.VISIBLE);
+        mChart.setVisibility(View.GONE);
+        alertBarChart.setVisibility(View.GONE);
+        timePieChart.setVisibility(View.GONE);
+        //2.设置图形的显示情况
+        //int sum = new NewtaskController().searchAllTasksNumber(AppApplication.getUser().getuId());
+        int sum = AppApplication.searchAllTasksNumber(AppApplication.getUser().getuId());
+        int min = 20;
+        if(sum > 20 ) {
+            int re = sum%20;
+            switch (re) {
+                case 1:
+                    min = 20;break;
+                case 2:
+                    min = 30;break;
+                case 3:
+                    min = 40;break;
+                case 4:
+                    min = 50;break;
+                case 5:
+                    min = 60;break;
+                default: min = 100;break;
+            }
+        }
+        lv.setAdapter(null);
+        //lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
+        //setListViewHeightBasedOnChildren(lv);
+
+        setData(0,min,sum);
+        typesearchBarChart.postInvalidate();
     }
     private void searchTimeSetListener(){
         searchTime.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                vline.setVisibility(View.GONE);
-                searchComplete.setTextColor(Color.rgb(54,54,54));
-                searchAlert.setTextColor(Color.rgb(54,54,54));
-                searchWay.setTextColor(Color.rgb(54,54,54));
-                searchTime.setTextColor(Color.rgb(255,255,255));
-                searchTimeDay.setTextColor(Color.rgb(54,54,54));
-                //1.设置查询的类型
-                searchway = 3;
-                //2.设置图形的显示情况
-                searchTimeMethod();
+                searchTimeCallMethod();
             }
         });
+    }
+    private void searchTimeCallMethod() {
+        AppApplication.setSearchpage(3);
+        vline.setVisibility(View.GONE);
+        searchComplete.setBackgroundResource(R.drawable.circleset2);
+        searchAlert.setBackgroundResource(R.drawable.circleset2);
+        searchWay.setBackgroundResource(R.drawable.circleset2);
+        searchTime.setBackgroundResource(R.drawable.circleset8);
+        searchTimeDay.setBackgroundResource(R.drawable.circleset2);
+        //1.设置查询的类型
+        searchway = 3;
+        //2.设置图形的显示情况
+        searchTimeMethod();
     }
     private void searchTimeDaySetListener(){
         searchTimeDay.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                vline.setVisibility(View.GONE);
-                searchComplete.setTextColor(Color.rgb(54,54,54));
-                searchAlert.setTextColor(Color.rgb(54,54,54));
-                searchWay.setTextColor(Color.rgb(54,54,54));
-                searchTime.setTextColor(Color.rgb(54,54,54));
-                searchTimeDay.setTextColor(Color.rgb(255,255,255));
-
-                //1.设置查询的类型
-                searchway = 4;
-                //2.设置图形的显示情况
-                searchTimeMethod();
+                searchTimeDayMethod();
             }
         });
+    }
+    private void searchTimeDayMethod() {
+        AppApplication.setSearchpage(4);
+        vline.setVisibility(View.GONE);
+        searchComplete.setBackgroundResource(R.drawable.circleset2);
+        searchAlert.setBackgroundResource(R.drawable.circleset2);
+        searchWay.setBackgroundResource(R.drawable.circleset2);
+        searchTime.setBackgroundResource(R.drawable.circleset2);
+        searchTimeDay.setBackgroundResource(R.drawable.circleset8);
+
+        //1.设置查询的类型
+        searchway = 4;
+        //2.设置图形的显示情况
+        searchTimeMethod();
     }
     private void lvsetOnItemClickListener(){
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -763,18 +740,14 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                                     final int position, long id) {
                 final Newtask task = tasks.get(position);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-                dialog.setTitle("任务内容");
-                //添加EditText 设置格式
-                EditText et = new EditText(getActivity());
-                et.setText(task.getNcontent());
-                et.setEnabled(false);
-                et.setBackground(null);
-                et.setGravity(Gravity.TOP | Gravity.LEFT);
-                et.setMinHeight(450);
-                et.setTextColor(Color.rgb(51, 51, 51));
-                dialog.setView(et);
-                //dialog.setMessage(task.getNcontent());
-                dialog.setPositiveButton("删除任务",new DialogInterface.OnClickListener() {
+                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+                View updateView = layoutInflater.inflate(R.layout.content, null);
+                final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                titlealert.setText("清单内容");
+                contentalert.setText("    " + task.getNcontent());
+                dialog.setView(updateView);
+                dialog.setPositiveButton("删除清单",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         //删除任务
@@ -839,7 +812,7 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                 });
                 //如果任务完成，那么可以修改为未完成
                 if(task.getNfinish() == 1 ) {
-                    dialog.setNegativeButton("未完成任务",
+                    dialog.setNegativeButton("未完成清单",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface arg0, int arg1) {
@@ -880,7 +853,7 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                             });
                     //如果任务未完成，可以修改为完成
                 }else if(task.getNfinish() == 0){
-                    dialog.setNegativeButton("完成任务",
+                    dialog.setNegativeButton("完成清单",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface arg0, int arg1) {
@@ -921,7 +894,7 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                             });
                 }
                 //点击完成该条任务
-                dialog.setNeutralButton("修改任务", new DialogInterface.OnClickListener() {
+                dialog.setNeutralButton("修改清单", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         FragmentTabHost fth = (FragmentTabHost) getActivity().findViewById(android.R.id.tabhost);
@@ -954,13 +927,11 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                             //未完成
                             if(completeflag == 0) {
                                 searchwaystate = 1;
-                                //tasks = new NewtaskController().searchNotCompleteTasks(AppApplication.getUser().getuId());
                                 tasks = AppApplication.searchNotCompleteTasks(AppApplication.getUser().getuId());
                                 lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                                 setListViewHeightBasedOnChildren(lv);
                             }else if(completeflag == 1) {
                                 searchwaystate = 2;
-                                //tasks = new NewtaskController().searchOverdueTasks(AppApplication.getUser().getuId());
                                 tasks = AppApplication.searchOverdueTasks(AppApplication.getUser().getuId());
                                 lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                                 setListViewHeightBasedOnChildren(lv);
@@ -969,7 +940,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                         case 2:
                             //过期searchOverdueTasks
                             searchwaystate = 2;
-                            //tasks = new NewtaskController().searchOverdueTasks(AppApplication.getUser().getuId());
                             tasks = AppApplication.searchOverdueTasks(AppApplication.getUser().getuId());
                             lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                             setListViewHeightBasedOnChildren(lv);
@@ -994,14 +964,12 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                     switch (e.getXIndex()) {
                         case 0:
                             searchwaystate = 0;
-                            //tasks = new NewtaskController().searchAlertTasks(AppApplication.getUser().getuId());
                             tasks = AppApplication.searchAlertTasks(AppApplication.getUser().getuId());
                             lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                             setListViewHeightBasedOnChildren(lv);
                             break;
                         case 1:
                             searchwaystate = 1;
-                            //tasks = new NewtaskController().searchNotAlertTasks(AppApplication.getUser().getuId());
                             tasks = AppApplication.searchNotAlertTasks(AppApplication.getUser().getuId());
                             lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                             setListViewHeightBasedOnChildren(lv);
@@ -1021,7 +989,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
                 //设置处理，按类型查询
                 if (searchway == 3) {
-                    //ArrayList<Newtask> timemonthtasks = new ArrayList<Newtask>();
                     tasks = new ArrayList<Newtask>();
                     switch (e.getXIndex()) {
                         case 0:
@@ -1031,9 +998,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                                     tasks.add(nt);
                                 }
                             }
-
-                            //tasks = new NewtaskController().searchAlertTasks(AppApplication.getUser().getuId());
-                            //tasks = AppApplication.searchAlertTasks(AppApplication.getUser().getuId());
                             lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                             setListViewHeightBasedOnChildren(lv);
                             break;
@@ -1045,8 +1009,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                                     tasks.add(nt);
                                 }
                             }
-                            //tasks = new NewtaskController().searchNotAlertTasks(AppApplication.getUser().getuId());
-                            //tasks = AppApplication.searchNotAlertTasks(AppApplication.getUser().getuId());
                             lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                             setListViewHeightBasedOnChildren(lv);
                             break;
@@ -1054,7 +1016,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                             break;
                     }
                 }
-                //timePieChart.postInvalidate();
             }
             @Override
             public void onNothingSelected() {
@@ -1070,11 +1031,9 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
                     return;
                 //首先获取横坐标的值
                 type = xVals.get(e.getXIndex());
-                // Log.w("tasktype",type);
                 //然后根据横坐标的值去取得sid
                 int getsid = new TasktypeController().getSidByTstyle(type);
                 //根据sid查找该用户的该类型的任务 更新adapter
-                //tasks = new NewtaskController().getTasksBytypeNumber(getsid,AppApplication.getUser().getuId());
                 tasks = AppApplication.getTasksBytypeNumber(getsid,AppApplication.getUser().getuId());
                 lv.setAdapter(new TaskAdapter(AppApplication.getContext(), R.layout.task_item, tasks));
                 setListViewHeightBasedOnChildren(lv);
@@ -1104,7 +1063,6 @@ public class SearchFragment extends Fragment implements DatePickerDialog.OnDateS
     }
     @Override
     public void onDestroy() {
-        //AppApplication.destroyAllAlerts();
         super.onDestroy();
     }
 }

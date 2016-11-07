@@ -11,12 +11,17 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import net.youmi.android.AdManager;
+import net.youmi.android.offers.OffersManager;
+import net.youmi.android.onlineconfig.OnlineConfigCallBack;
 
 import controller.AppApplication;
 import controller.NewtaskController;
@@ -34,6 +39,7 @@ public class MainActivity extends BaseActivity {
     private String pwd;//字符串密码
     private SharedPreferences pref;//用于记录个人信息，是否记住密码
     private SharedPreferences.Editor editor;
+    private static boolean isAdCanShow = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +48,11 @@ public class MainActivity extends BaseActivity {
         pref = getSharedPreferences("data", MODE_PRIVATE);
         //设置Context
         TaskRecordOpenHelper.setContext(getApplicationContext());
-
         //初始化控件
         register = (TextView) findViewById(R.id.register);
         eusername = (EditText) findViewById(R.id.userNamea);
         epwd = (EditText) findViewById(R.id.pwd);
         loginbtn = (Button) findViewById(R.id.loginbtn);
-
         //默认是记住密码的
         boolean isRember = pref.getBoolean("rember_password", true);
         if(isRember) {
@@ -58,7 +62,6 @@ public class MainActivity extends BaseActivity {
             eusername.setText(u);
             epwd.setText(p);
         }
-
         //如果用户名和密码不为空，那么直接进入
         //获取EditText中的值
         username = eusername.getText().toString();
@@ -85,6 +88,10 @@ public class MainActivity extends BaseActivity {
                  *  以上2,3,4都是在一个事务中进行的，要不都成功，要不都不成功，是一个事务
                  */
                 AppApplication.setTasks(new NewtaskController().searchAllTasksIntoApp());
+                //有米广告的初始化接口
+                AdManager.getInstance(MainActivity.this).init("e16b71668ef02ecd", "53770e45917f7a3f",false, false);
+                showAd();
+                //AdManager.getInstance(MainActivity.this).init("e16b71668ef02ecd", "53770e45917f7a3f",false, false);
                /* Intent  intent = new Intent(MainActivity.this, MyService.class);
                 startService(intent);*/
                 //AppApplication.setArraytypes(new TasktypeController().selectAllTypes(AppApplication.getUser().getuId()));
@@ -108,7 +115,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
-                ds.setColor(Color.WHITE);
+                ds.setColor(Color.rgb(54,54,54));
                 ds.setUnderlineText(false);
             }
             @Override
@@ -129,9 +136,16 @@ public class MainActivity extends BaseActivity {
                 pwd = epwd.getText().toString();
                 if(username == null || username.equals("") || pwd == null || pwd.equals("")) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this,AlertDialog.THEME_HOLO_LIGHT);
-                    dialog.setTitle("登录失败");
-                    dialog.setMessage("用户名或密码不能为空");
-                    dialog.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                    LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+                    View updateView = layoutInflater.inflate(R.layout.content, null);
+                    final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                    final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                    titlealert.setText("登录失败");
+                    contentalert.setText("\n\n\n\n        用户名或密码不能为空" );
+                    dialog.setView(updateView);
+                    //dialog.setTitle("登录失败");
+                    //dialog.setMessage("用户名或密码不能为空");
+                    dialog.setPositiveButton("好吧，那我输入信息嘛",new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
 
@@ -154,13 +168,14 @@ public class MainActivity extends BaseActivity {
                          *  4、如果有修改的任务，那么就先修改，如果修改成功，再在AppAPplication中修改
                          *  以上2,3,4都是在一个事务中进行的，要不都成功，要不都不成功，是一个事务
                          */
+
                         AppApplication.setUser(rs);
                        AppApplication.setTasks(new NewtaskController().searchAllTasksIntoApp());
+                        //有米广告的初始化接口
+                        AdManager.getInstance(MainActivity.this).init("e16b71668ef02ecd", "53770e45917f7a3f",true, true);
+                        showAd();
+                        //AdManager.getInstance(MainActivity.this).init("e16b71668ef02ecd", "53770e45917f7a3f",false, false);
                         //AppApplication.setArraytypes(new TasktypeController().selectAllTypes(AppApplication.getUser().getuId()));
-
-
-                        //Log.w("taskemial", rs.getuEmail()+ "");
-                        //Log.w("task",rs.getuId()+rs.getuName() + "");
                         //默认保存用户信息到Preferences中
                         editor = pref.edit();
                         editor.putBoolean("rember_password", true);
@@ -174,9 +189,18 @@ public class MainActivity extends BaseActivity {
                         finish();
                     }else {
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this,AlertDialog.THEME_HOLO_LIGHT);
-                        dialog.setTitle("登录失败");
-                        dialog.setMessage("用户名或密码错误");
-                        dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                        LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+                        View updateView = layoutInflater.inflate(R.layout.content, null);
+                        final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                        final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                        titlealert.setText("登录失败");
+                        contentalert.setText("\n" +
+                                "\n" +
+                                "\n\n        用户名或密码错误" );
+                        dialog.setView(updateView);
+                       /* dialog.setTitle("登录失败");
+                        dialog.setMessage("用户名或密码错误");*/
+                        dialog.setPositiveButton("好吧，那我重新输入嘛",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
 
@@ -188,4 +212,37 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+    private void showOfferWall() {
+        if (isAdCanShow) {
+            OffersManager.getInstance(this).showOffersWall();
+        }
+    }
+    private void showAd() {
+        AdManager.getInstance(this).asyncGetOnlineConfig("isOpen", new OnlineConfigCallBack() {
+            @Override
+            public void onGetOnlineConfigSuccessful(String key, String value) {
+// TODO Auto-generated method stub
+// 获取在线参数成功
+
+                if (key.equals("isOpen")) {
+                    if (value.equals("1")) {
+// 这里设置广告开关——开启
+                        isAdCanShow = true;
+                    } else if (value.equals("0")) {
+// 这里设置广告开关——关闭
+                        isAdCanShow = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onGetOnlineConfigFailed(String key) {
+// TODO Auto-generated method stub
+// 获取在线参数失败，可能原因有：键值未设置或为空、网络异常、服务器异常
+            }
+        });
+    }
+
+
 }

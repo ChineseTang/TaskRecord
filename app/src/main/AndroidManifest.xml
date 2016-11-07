@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="preferExternal"
+    xmlns:tools="http://schemas.android.com/tools"
     package="view.com.taskrecord">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 必须申明的权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 以下为可选的权限 -->
+    <!-- 使用GPS获取用户精确定位信息 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 使用WIFI获取用户精确定位信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
@@ -14,6 +27,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,11 +40,13 @@
             android:label="@string/title_activity_base" />
         <activity
             android:name=".RegisterActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_register"
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".MainTabActivity"
             android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_main_tab"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
         <receiver android:name="receiver.MyReceiver">
@@ -42,12 +58,26 @@
         </receiver>
         <service android:name="receiver.MyService">
         </service>
-        <supports-screens
-            android:smallScreens="true"
-            android:normalScreens="true"
-            android:largeScreens="true"
-            android:resizeable="true"
-            android:anyDensity="true"/>
+        <activity
+            android:name="net.youmi.android.AdBrowser"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
+        <service
+            android:name="net.youmi.android.AdService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="net.youmi.android.ExpService"
+            android:exported="false" >
+        </service>
+        <!--<receiver
+            android:name="net.youmi.android.AdReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>-->
     </application>
 
 </manifest>

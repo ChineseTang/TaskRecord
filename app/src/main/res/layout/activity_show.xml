@@ -23,8 +23,8 @@
         <!-- 现在日期-->
         <TextView
             android:id="@+id/iv_left"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:textColor="#363636"
             android:gravity="center"
             android:textSize="18sp"
@@ -35,8 +35,8 @@
             android:contentDescription="@null" />
         <TextView
             android:id="@+id/tv_today"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="@drawable/now"
             android:textSize="18sp"
             android:textColor="#363636"
@@ -71,8 +71,8 @@
         <!-- 向右移动一个月-->
         <TextView
             android:id="@+id/iv_right"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:textColor="#363636"
             android:layout_marginLeft="2dp"
             android:gravity="center"
@@ -91,7 +91,7 @@
         <!-- 显示星期-->
         <myview.WeekDayView
             android:layout_width="match_parent"
-            android:layout_height="35dp" />
+            android:layout_height="32dp" />
         <!-- 显示详细日历-->
         <myview.MonthDateView
             android:id="@+id/monthDateView"
@@ -101,7 +101,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="2dp"
+        android:layout_margin="1dp"
         android:background="#dddddd" />
     <FrameLayout
         android:layout_width="match_parent"
@@ -127,6 +127,8 @@
             fab:fab_colorPressed="@color/backgroudmd"
             fab:fab_colorRipple="@color/yellow"
             />
+
     </FrameLayout>
+
 </LinearLayout>
 </ScrollView>

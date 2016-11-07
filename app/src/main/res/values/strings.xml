@@ -5,6 +5,7 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_main_tab">MainTabActivity</string>
     <string name="username">用&#160;户</string>
+    <string name="orginpwd">原密码</string>
     <string name="pwd">密&#160;码</string>
     <string name="repwd">请再输入密码</string>
     <string name="register">没有账号 点击注册</string>

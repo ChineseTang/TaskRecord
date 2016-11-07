@@ -24,10 +24,8 @@ public class MyService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //获得随机数
-
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         //此处设置开启AlarmReceiver这个Service
-
         Bundle mExtra = new Bundle();
         //到数据库中查询所有的未提醒的任务，将他们添加到AlarmManger中去
         ArrayList<TaskAlert> taskalerts = new ArrayList<TaskAlert>();
@@ -55,13 +53,8 @@ public class MyService extends Service{
                 }
             }
         }
-        //ELAPSED_REALTIME_WAKEUP表示让定时任务的出发时间从系统开机算起，并且会唤醒CPU。
-       // manager.setRepeating(AlarmManager.ELAPSED_REALTIME, now,Minutes,pi);
-        //manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, now, 3000, pi);
         return super.onStartCommand(intent, flags, startId);
     }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();

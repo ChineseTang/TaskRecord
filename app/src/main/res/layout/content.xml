@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/updatenewpwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="2dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            >
+            <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="8dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circlesettitle"
+            android:gravity="center"
+            android:text="空"
+            android:textColor="#ffffff"
+            android:textSize="21sp" />
+
+            <EditText
+                android:id="@+id/titlealert"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:enabled="false"
+                android:text="清单内容"
+                android:textColor="#363636"
+                android:textSize="21sp" /></LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#dddddd" />
+
+        <EditText
+            android:id="@+id/contentalert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center|center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            android:enabled="false"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:minHeight="200dp"
+            android:text="this is  a test"
+            android:textColor="#363636"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</ScrollView>

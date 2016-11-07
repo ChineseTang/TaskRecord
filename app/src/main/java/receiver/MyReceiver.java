@@ -35,9 +35,6 @@ public class MyReceiver extends BroadcastReceiver {
           if(getalert == 0) {
               if (taskalert != null) {
                   // 添加到AppApplication中的ArrayList<Integer> alert
-                  //Integer i = new Integer(taskalert.getAid());
-                  //Log.w("taski",i + " ");
-                  // AppApplication.getAlert().add(i);
                   new TaskAlertController().ChangeToFinish(taskalert.getAid());
                   int rs = taskalert.getAlertFinish();
                   Log.w("taskrem", AppApplication.getRs() + " " + taskalert.getAid() + " ");
@@ -45,15 +42,9 @@ public class MyReceiver extends BroadcastReceiver {
                       AppApplication.setRs(taskalert.getAid());
                       //然后去数据库中判断该任务是否已经提醒过没有
                       Log.w("tasktest", taskalert.getAid() + taskalert.getAlertContent());
-                      // rs = new TaskAlertController().selectFinishOrNot(taskalert.getAid());
-                      //如果任务没有被提醒
-                      //if (rs == 0) {
-                      //String ct = intent.getStringExtra("ct");
                       String ct = taskalert.getAlertContent();
-                      //Log.w("task","收到了" + content);
-                      //Log.w("task", "accept " + ct);
                       Notification notify = new Notification.Builder(context)
-                              .setSmallIcon(R.drawable.ic_drawer)
+                              .setSmallIcon(R.drawable.logoalert)
                               .setTicker("空空清单提醒:" + ct)
                               .setContentTitle("任务内容")
                               .setContentText(ct)
@@ -64,18 +55,6 @@ public class MyReceiver extends BroadcastReceiver {
                       NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                       // 通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
                       manager.notify(number, notify);
-                      //更新状态 运用观察者模式
-                      // AppApplication.getAlertnumber().notifyWatchers(taskalert.getAid());
-                      //最后在数据库中改变该任务的状态
-
-               /* new Thread(){
-                    public void run(){
-                        new TaskAlertController().ChangeToFinish(taskalert.getAid());
-                        System.out.println("Thread Running");
-                    }
-                }.start();*/
-
-                      //}
                   }
               }
           }

@@ -3,14 +3,13 @@ package view.com.taskrecord;
 /**
  * Created by tangzhijing on 2016/8/31.
  */
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,12 +57,6 @@ public class ShowFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_show, container, false);
         // 初始化控件
         init(view);
-      /*view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gesture.onTouchEvent(event);//返回手势识别触发的事件
-            }
-        });*/
         //用于添加新的任务，传递时间参数
       fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +64,7 @@ public class ShowFragment extends Fragment {
                 //点击跳转到TaskFragment界面中去，同时将时间参数传递过去
                 fth.setup(getActivity(), getActivity().getSupportFragmentManager(), R.id.realtabcontent);
                 AppApplication.setTouchtime(touchTime);
+                AppApplication.setUpdatetask(null);
                 fth.setCurrentTab(1);
             }
         });
@@ -80,12 +74,6 @@ public class ShowFragment extends Fragment {
             @Override
             public void onClickOnDate() {
                 // 显示当天的任务
-				/*
-				 * Toast.makeText(AppApplication.getContext(), "点击了：" +
-				 * monthDateView.getmSelYear() +
-				 * (monthDateView.getmSelMonth()+1) +
-				 * monthDateView.getmSelDay(), Toast.LENGTH_SHORT).show();
-				 */
                 int omonth = monthDateView.getmSelMonth() + 1;
                 int oday = monthDateView.getmSelDay();
                 String smonth;
@@ -104,9 +92,6 @@ public class ShowFragment extends Fragment {
                         + "." + sday;
                 touchTime = new String(gettime);
                 // 然后根据日期去数据库查找对应的当日任务
-                /*tasks = new NewtaskController().searchByTime(AppApplication
-                        .getUser().getuId(), gettime);*/
-
                 //然后根据日期去AppApplication中的tasks中去遍历
                 tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(), gettime);
                 setTasks();
@@ -118,21 +103,20 @@ public class ShowFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+
+
                 final Newtask task = tasks.get(position);
                 final int positionin = position;
-                AlertDialog.Builder dialog = new AlertDialog.Builder(
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(
                         getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-                EditText et = new EditText(getActivity());
-                et.setText(task.getNcontent());
-                et.setEnabled(false);
-                et.setBackground(null);
-                et.setGravity(Gravity.TOP | Gravity.LEFT);
-                et.setMinHeight(450);
-                et.setTextColor(Color.rgb(51, 51, 51));
-                dialog.setView(et);
-                dialog.setTitle("                    任务内容");
-                //dialog.setMessage(task.getNcontent());
-                dialog.setPositiveButton("删除任务",
+                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+                final View updateView = layoutInflater.inflate(R.layout.content, null);
+                final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                titlealert.setText("清单内容");
+                contentalert.setText("        " + task.getNcontent());
+                dialog.setView(updateView);
+                dialog.setPositiveButton("删除清单",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
@@ -141,14 +125,6 @@ public class ShowFragment extends Fragment {
                                 new NewtaskController().deleteTaskById(task.getNtId());
                                 //将该任务的所有通知全部修改成已经提醒的状态
                                 new TaskAlertController().ChangeToFinishByNtid(task.getNtId());
-                             /*   tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(),datetime);
-                                setTasks();
-                                taskadapter.notifyDataSetChanged();*/
-                               /*tasks.remove(positionin); //monthDateView.postInvalidate();
-                                setListViewHeightBasedOnChildren(tasklist);
-                                monthDateView.invalidate();
-                                taskadapter.notifyDataSetChanged();*/
-                               // String datetime = monthDateView.getTodayToView();
                                 tasks = AppApplication.searchByTime(AppApplication.getUser().getuId(), datetime);
                                 //重新设置任务
                                 setTasks();
@@ -160,7 +136,7 @@ public class ShowFragment extends Fragment {
                         });
                 //如果任务完成，那么可以修改为未完成
                 if(task.getNfinish() == 1 ) {
-                    dialog.setNegativeButton("未完成任务",
+                    dialog.setNegativeButton("未完成清单",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface arg0, int arg1) {
@@ -174,7 +150,7 @@ public class ShowFragment extends Fragment {
                             });
                     //如果任务未完成，可以修改为完成
                 }else if(task.getNfinish() == 0){
-                    dialog.setNegativeButton("完成任务",
+                    dialog.setNegativeButton("完成清单",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface arg0, int arg1) {
@@ -188,7 +164,7 @@ public class ShowFragment extends Fragment {
                             });
                 }
                 //点击修改该条任务
-                dialog.setNeutralButton("修改任务", new DialogInterface.OnClickListener() {
+                dialog.setNeutralButton("修改清单", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         fth.setup(getActivity(), getActivity().getSupportFragmentManager(), R.id.realtabcontent);
@@ -229,6 +205,7 @@ public class ShowFragment extends Fragment {
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         gesture = new GestureDetector(this.getActivity(), new MyOnGestureListener());
         fab.attachToListView(tasklist);
+        //fab.getBackground().setAlpha(180);
         fth = (FragmentTabHost) getActivity().findViewById(android.R.id.tabhost);
         touchTime = monthDateView.getTodayToView();
     }
@@ -362,7 +339,6 @@ public class ShowFragment extends Fragment {
     }
     @Override
     public void onDestroy() {
-        //AppApplication.destroyAllAlerts();
         super.onDestroy();
     }
 }

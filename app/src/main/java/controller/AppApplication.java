@@ -7,17 +7,12 @@ package controller;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import interfaces.ConcreteWatched;
-import interfaces.ConcreteWatcher;
-import interfaces.Watched;
-import interfaces.Watcher;
 import model.Newtask;
 import model.TUser;
 import receiver.MyService;
@@ -29,11 +24,53 @@ public class AppApplication extends Application {
     private static String touchtime;//存储添加任务的时间
     private static Newtask updatetask;//修改的任务
     private static ArrayList<Newtask> tasks;//存储所有的任务，方便查询，不用每次都去数据库中查询，提高效率
-    private static Watched alertnumber = new ConcreteWatched();
-    private static Watcher watchernumber = new ConcreteWatcher();
     private static int rs;
     private static ArrayList<Integer> alert =  new ArrayList<Integer>();
+    private static int searchpage;//存储查询界面当前显示的是哪个界面
+    private static String taskcontenttemp;
+    private static String alertstring;
+    private static int sid;
+    private static boolean show;
 
+    public static boolean isShow() {
+        return show;
+    }
+
+    public static void setShow(boolean show) {
+        AppApplication.show = show;
+    }
+
+    public static String getAlertstring() {
+        return alertstring;
+    }
+
+    public static void setAlertstring(String alertstring) {
+        AppApplication.alertstring = alertstring;
+    }
+
+    public static int getSid() {
+        return sid;
+    }
+
+    public static void setSid(int sid) {
+        AppApplication.sid = sid;
+    }
+
+    public static String getTaskcontenttemp() {
+        return taskcontenttemp;
+    }
+
+    public static void setTaskcontenttemp(String taskcontenttemp) {
+        AppApplication.taskcontenttemp = taskcontenttemp;
+    }
+
+    public static int getSearchpage() {
+        return searchpage;
+    }
+
+    public static void setSearchpage(int searchpage) {
+        AppApplication.searchpage = searchpage;
+    }
 
     public static ArrayList<Integer> getAlert() {
         return alert;
@@ -49,31 +86,6 @@ public class AppApplication extends Application {
 
     public static void setRs(int rs) {
         AppApplication.rs = rs;
-    }
-    /* private static ArrayList<String> arraytypes;
-
-    public static ArrayList<String> getArraytypes() {
-        return arraytypes;
-    }
-
-    public static void setArraytypes(ArrayList<String> arraytypes) {
-        AppApplication.arraytypes = arraytypes;
-    }*/
-
-    public static Watched getAlertnumber() {
-        return alertnumber;
-    }
-
-    public static void setAlertnumber(Watched alertnumber) {
-        AppApplication.alertnumber = alertnumber;
-    }
-
-    public static Watcher getWatchernumber() {
-        return watchernumber;
-    }
-
-    public static void setWatchernumber(Watcher watchernumber) {
-        AppApplication.watchernumber = watchernumber;
     }
 
     public static ArrayList<Newtask> getTasks() {
@@ -108,9 +120,10 @@ public class AppApplication extends Application {
             for(Integer i : alerts){
                 int aid= i.intValue();
                 tac.ChangeToFinish(aid);
-                Log.w("taskalertonDestryou", i + " execute");
+                //Log.w("taskalertonDestryou", i + " execute");
             }}
     }
+
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
@@ -119,8 +132,12 @@ public class AppApplication extends Application {
         touchtime = null;
         updatetask = null;
         tasks = new ArrayList<Newtask>();
-        alertnumber.addWatcher(watchernumber);
         rs = -1;
+        taskcontenttemp = null;
+        alertstring = null;
+        show  =true;
+        sid = -1;
+        searchpage = 0;
         //设置后台服务
         Intent intent = new Intent(AppApplication.this, MyService.class);
         startService(intent);
@@ -219,7 +236,7 @@ public class AppApplication extends Application {
      * 更新任务
      * @param newtask
      */
-    public static void updateTask(Newtask newtask) {
+    public static void updateNewTask(Newtask newtask) {
         int newtaskId = newtask.getNtId();
         for (Newtask nt: tasks) {
             if(nt.getNtId() == newtaskId ) {
@@ -491,18 +508,4 @@ public class AppApplication extends Application {
         }
         return searchByTimeTasks;
     }
-
-    /**22
-     * 更新任务类型
-     * @param oldtype
-     * @param newtype
-     */
- /*   public static void updateArrayType(String oldtype,String newtype) {
-            for(String type :arraytypes) {
-                if(oldtype.equals(type)) {
-                    type = newtype;
-                    break;
-                }
-            }
-    }*/
 }

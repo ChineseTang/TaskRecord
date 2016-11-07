@@ -46,10 +46,8 @@ public class TUserController {
      * @return
      */
     public boolean registerUser(TUser user) {
-
         TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
         SQLiteDatabase db = tdb.getConnection();
-
         ContentValues values = new ContentValues();
         values.put("uName", user.getuName());
         values.put("uEmail", user.getuEmail());
@@ -60,7 +58,6 @@ public class TUserController {
         values.put("uTime", user.getuTime());
         //插入数据
         db.insert("TUser", null, values);
-
         tdb.close(db);
         return true;
     }
@@ -72,11 +69,27 @@ public class TUserController {
      * @return
      */
     public boolean updateUserName(int  id,String newName) {
-
         TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
         SQLiteDatabase db = tdb.getConnection();
         String sql = "update TUser set uName='" + newName + "' where uId=" + id;
         AppApplication.getUser().setuName(newName);
+        db.execSQL(sql);
+        tdb.close(db);
+        return true;
+    }
+
+    /**
+     * 更新密码
+     * @param id
+     * @param newPwd
+     * @return
+     */
+    public boolean updateUserPwd(int  id,String newPwd) {
+
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        String sql = "update TUser set uPwd='" + newPwd + "' where uId=" + id;
+        //AppApplication.getUser().setuName(newName);
         db.execSQL(sql);
         tdb.close(db);
         return true;
@@ -124,7 +137,29 @@ public class TUserController {
         //searchAllUser();
         return tuser;
     }
-
+    /**
+     * 判断密码 成功返回true ，否则返回 false
+     * @param
+     * @return
+     */
+    public boolean judgePwd(String username,String pwd) {
+        TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
+        SQLiteDatabase db = tdb.getConnection();
+        boolean rs = false;
+        String sql = "select uPwd from TUser where uName='" + username + "'";
+        Cursor cursor = db.rawQuery(sql, null);
+        //Cursor cursor = db.rawQuery(sql, new String[] { user.getuName(), user.getuPwd() });
+            if (cursor.moveToFirst()) {
+                String getpwd = cursor.getString(cursor.getColumnIndex("uPwd"));
+                //判断密码相等
+                if(getpwd.equals(pwd)) {
+                     rs = true;
+                    }
+                }
+            cursor.close();
+            db.close();
+        return rs;
+    }
     /*public void searchAllUser() {
         TaskRecordOpenHelper tdb = new TaskRecordOpenHelper();
         SQLiteDatabase db = tdb.getConnection();

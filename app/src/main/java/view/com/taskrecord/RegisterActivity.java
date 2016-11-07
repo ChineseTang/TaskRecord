@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -25,7 +26,6 @@ public class RegisterActivity extends BaseActivity {
     private ImageButton iback;
     private ImageView iphoto;
     private EditText eusername;
-    //private EditText email;
     private EditText epwd;
     private EditText erepwd;
     private Button regbtn;
@@ -35,8 +35,6 @@ public class RegisterActivity extends BaseActivity {
     private String srpwd;
     private String sgender = "男";//性别
     private Uri imageUri;
-    //public static final int TAKE_PHOTO = 1;
-    //public static final int CROP_PHOTO = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,26 +49,6 @@ public class RegisterActivity extends BaseActivity {
                 finish();
             }
         });
-        //为iphoto 按钮注册监听事件，启动照相机，然后照一张相片
-        /*iphoto.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //创建File对象，用于存储拍照后的照片
-                File outputImage = new File(Environment.getExternalStorageDirectory(),"output_image.jpg");
-                try {
-                    if(outputImage.exists()) {
-                        outputImage.delete();
-                    }
-                    outputImage.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                imageUri = Uri.fromFile(outputImage);
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                startActivityForResult(intent,TAKE_PHOTO);//启动相机程序
-            }
-        });*/
         //注册按钮监听处理事件
         regbtn.setOnClickListener(new OnClickListener() {
             @Override
@@ -83,9 +61,16 @@ public class RegisterActivity extends BaseActivity {
                 //2 验证注册信息的值是否合理
                 if(susername == null || susername.equals("")|| semail == null || semail.equals("") || spwd == null || spwd.equals("")|| srpwd == null || srpwd.equals("")) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,AlertDialog.THEME_HOLO_LIGHT);
-                    dialog.setTitle("注册失败");
-                    dialog.setMessage("用户信息不能为空");
-                    dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    LayoutInflater layoutInflater = LayoutInflater.from(RegisterActivity.this);
+                    View updateView = layoutInflater.inflate(R.layout.content, null);
+                    final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                    final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                    titlealert.setText("注册失败");
+                    contentalert.setText("\n" +
+                            "\n" +
+                            "\n\n        用户信息不能为空哟O(∩_∩)O~" );
+                    dialog.setView(updateView);
+                    dialog.setPositiveButton("好吧，那我输入信息嘛",new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
                         }
@@ -93,9 +78,16 @@ public class RegisterActivity extends BaseActivity {
                     dialog.show();
                 }else if(!spwd.equals(srpwd)) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,AlertDialog.THEME_HOLO_LIGHT);
-                    dialog.setTitle("注册失败");
-                    dialog.setMessage("两次密码应该相同");
-                    dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    LayoutInflater layoutInflater = LayoutInflater.from(RegisterActivity.this);
+                    View updateView = layoutInflater.inflate(R.layout.content, null);
+                    final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                    final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                    titlealert.setText("注册失败");
+                    contentalert.setText("\n" +
+                            "\n" +
+                            "\n\n        两次密码应该相同哟O(∩_∩)O哈哈~" );
+                    dialog.setView(updateView);
+                    dialog.setPositiveButton("好吧，那我输入信息相同的密码哟",new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
                         }
@@ -104,9 +96,16 @@ public class RegisterActivity extends BaseActivity {
                     //判断数据库中是否已经存在该用户，根据username进行判断
                 }else if(new TUserController().isExistUsername(susername)) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,AlertDialog.THEME_HOLO_LIGHT);
-                    dialog.setTitle("注册失败");
-                    dialog.setMessage("该用户名已经存在！");
-                    dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    LayoutInflater layoutInflater = LayoutInflater.from(RegisterActivity.this);
+                    View updateView = layoutInflater.inflate(R.layout.content, null);
+                    final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                    final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                    titlealert.setText("注册失败");
+                    contentalert.setText("\n" +
+                            "\n" +
+                            "\n\n        不好意思，该用户名已经存在！" );
+                    dialog.setView(updateView);
+                    dialog.setPositiveButton("好吧，那我只有输入新的名字了",new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
                         }
@@ -129,9 +128,16 @@ public class RegisterActivity extends BaseActivity {
                     if(result) {
                         //如果插入成功，跳转到登录界面
                         AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,AlertDialog.THEME_HOLO_LIGHT);
-                        dialog.setTitle("注册成功");
-                        dialog.setMessage("点击进入登录页面");
-                        dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                        LayoutInflater layoutInflater = LayoutInflater.from(RegisterActivity.this);
+                        View updateView = layoutInflater.inflate(R.layout.content, null);
+                        final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                        final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                        titlealert.setText("注册成功");
+                        contentalert.setText("\n" +
+                                "\n" +
+                                "\n\n        点击进入登录页面" );
+                        dialog.setView(updateView);
+                        dialog.setPositiveButton("那我进去登录了哟",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
@@ -142,9 +148,16 @@ public class RegisterActivity extends BaseActivity {
                         dialog.show();
                     }else {
                         AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this,AlertDialog.THEME_HOLO_LIGHT);
-                        dialog.setTitle("注册失败");
-                        dialog.setMessage("注册信息有错误");
-                        dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                        LayoutInflater layoutInflater = LayoutInflater.from(RegisterActivity.this);
+                        View updateView = layoutInflater.inflate(R.layout.content, null);
+                        final EditText titlealert = (EditText) updateView.findViewById(R.id.titlealert);
+                        final EditText contentalert = (EditText) updateView.findViewById(R.id.contentalert);
+                        titlealert.setText("注册失败");
+                        contentalert.setText("\n" +
+                                "\n" +
+                                "\n\n        注册信息有错误" );
+                        dialog.setView(updateView);
+                        dialog.setPositiveButton("好吧，你赢了",new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                             }
@@ -155,66 +168,7 @@ public class RegisterActivity extends BaseActivity {
             }
         });
     }
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case TAKE_PHOTO:
-                if(resultCode == RESULT_OK) {
-                    Intent intent = new Intent("com.android.camera.action.CROP");
-                    intent.setDataAndType(imageUri, "image*//*");
-                    intent.putExtra("scale", true);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                    startActivityForResult(intent, CROP_PHOTO);//启动裁剪程序
-                }
-                break;
-            case CROP_PHOTO:
-                if(resultCode == RESULT_OK) {
-                    try {
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        bitmap = makeRoundCorner(bitmap);
-                        iphoto.setImageBitmap(bitmap);//将裁剪后的照片显示出来
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }*/
-    /*public static Bitmap makeRoundCorner(Bitmap bitmap)
-    {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int left = 0, top = 0, right = width, bottom = height;
-        float roundPx = height/2;
-        if (width > height) {
-            left = (width - height)/2;
-            top = 0;
-            right = left + height;
-            bottom = height;
-        } else if (height > width) {
-            left = 0;
-            top = (height - width)/2;
-            right = width;
-            bottom = top + width;
-            roundPx = width/2;
-        }
-        // Log.i(TAG, "ps:"+ left +", "+ top +", "+ right +", "+ bottom);
-        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-        int color = 0xff424242;
-        Paint paint = new Paint();
-        Rect rect = new Rect(left, top, right, bottom);
-        RectF rectF = new RectF(rect);
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
-    }*/
+
     /**
      * 初始化控件
      */
@@ -222,7 +176,6 @@ public class RegisterActivity extends BaseActivity {
         iback = (ImageButton) findViewById(R.id.array);
         iphoto = (ImageView) findViewById(R.id.photo);
         eusername = (EditText) findViewById(R.id.userName);
-        //email = (EditText) findViewById(R.id.emailaddr);
         epwd = (EditText) findViewById(R.id.pwd);
         erepwd = (EditText) findViewById(R.id.repwd);
         regbtn = (Button) findViewById(R.id.registerbtn);

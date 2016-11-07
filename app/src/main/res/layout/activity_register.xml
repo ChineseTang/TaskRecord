@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/bg2"
+    android:background="#ffffff"
     android:layout_height="match_parent"
     >
     <LinearLayout
@@ -13,7 +13,7 @@
         <!--  photo view -->
         <ImageButton
             android:id="@+id/array"
-            android:background="@drawable/array"
+            android:background="@drawable/arraynew"
             android:layout_gravity="left"
             android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
@@ -47,15 +47,15 @@
                 android:layout_marginRight="30dp"
                 android:layout_gravity="center_horizontal|center|center_vertical"
                 android:background="@drawable/side"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:textSize="18sp"
                 android:singleLine="true"
-                android:textColorHint="#ffffff"
+                android:textColorHint="#999999"
                 android:drawablePadding="18dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="28dp"
                 android:paddingLeft="25dp"
-                android:drawableLeft="@drawable/user"
+                android:drawableLeft="@drawable/usernew"
                 android:hint="@string/username"
                 />
             <!--  邮箱 -->
@@ -88,16 +88,16 @@
                 android:layout_marginRight="30dp"
                 android:layout_gravity="center_horizontal|center|center_vertical"
                 android:background="@drawable/side"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:textSize="18sp"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:textColorHint="#ffffff"
+                android:textColorHint="#999999"
                 android:drawablePadding="18dp"
                 android:paddingLeft="25dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:drawableLeft="@drawable/pwdicon"
+                android:drawableLeft="@drawable/pwdiconnew"
                 android:hint="@string/pwd"
                 />
             <!--  密码 -->
@@ -109,16 +109,16 @@
                 android:layout_marginRight="30dp"
                 android:layout_gravity="center_horizontal|center|center_vertical"
                 android:background="@drawable/side"
-                android:textColor="#ffffff"
+                android:textColor="#363636"
                 android:textSize="18sp"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:textColorHint="#ffffff"
+                android:textColorHint="#999999"
                 android:drawablePadding="18dp"
                 android:paddingLeft="25dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:drawableLeft="@drawable/pwdicon"
+                android:drawableLeft="@drawable/pwdiconnew"
                 android:hint="@string/repwd"
                 />
         </LinearLayout>
@@ -135,7 +135,7 @@
             android:layout_marginRight="58dp"
             android:textSize="18sp"
             android:background="@drawable/side"
-            android:textColor="#ffffff"
+            android:textColor="#363636"
             />
     </LinearLayout>
 </ScrollView>
